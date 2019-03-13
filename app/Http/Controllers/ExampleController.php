@@ -9,62 +9,34 @@ use NFePHP\NFe\Common\Standardize;
 
 class ExampleController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
-    {
-        //
-    }
+    { }
 
     public function check()
     {
-        $config = [
-            "atualizacao" => "2015-10-02 06:01:21",
-            "tpAmb" => 2,
-            "razaosocial" => "Fake Materiais de construção Ltda",
-            "siglaUF" => "SP",
-            "cnpj" => "00716345000119",
-            "schemes" => "PL_008i2",
-            "versao" => "4.00",
-            "tokenIBPT" => "AAAAAAA",
-            "CSC" => "GPB0JBWLUR6HWFTVEAS6RJ69GPCROFPBBB8G",
-            "CSCid" => "000002",
-            "aProxyConf" => [
-                "proxyIp" => "",
-                "proxyPort" => "",
-                "proxyUser" => "",
-                "proxyPass" => ""
-            ]
-        ];
-        $pfx = file_get_contents(__DIR__ . '/certificado_teste.pfx');
+        $certPath = storage_path('app') . env('APP_CERTS_PATH', true) . '/certificado.pfx';
+        $pfx = file_get_contents($certPath);
+
+        $CNPJPath = storage_path('app') . env('APP_CNPJ_PATH', true) . '/CNPJ01.json';
+        $cnpj01 = file_get_contents($CNPJPath);
 
         try {
-            $certificate = Certificate::readPfx($pfx, 'associacao');
-            $tools = new Tools(json_encode($config), $certificate);
+            $certificate = Certificate::readPfx($pfx, env('APP_CART_PASSWORD', true));
+            $tools = new Tools($cnpj01, $certificate);
             $tools->model('55');
 
-            $chave = '52170522555994000145550010000009651275106690';
-            $response = $tools->sefazConsultaChave($chave);
+            //guilherme
+            $chave = '';
 
-            //você pode padronizar os dados de retorno atraves da classe abaixo
-            //    //de forma a facilitar a extração dos dados do XML
-            // NOTA: mas lembre-se que esse XML muitas vezes será necessário,
-            //      quando houver a necessidade de protocolos
+            $response = $tools->sefazConsultaChave($chave);
             $stdCl = new Standardize($response);
             //nesse caso $std irá conter uma representação em stdClass do XML
             $std = $stdCl->toStd();
-            //nesse caso o $arr irá conter uma representação em array do XML
-            $arr = $stdCl->toArray();
-            //nesse caso o $json irá conter uma representação em JSON do XML
-            $json = $stdCl->toJson();
+            var_dump($std);
+            die;
 
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
     }
-
-    //
 }
