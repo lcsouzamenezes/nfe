@@ -18,3 +18,7 @@ $router->get('/', function () use ($router) {
 $router->get('/check', [
     'as' => 'profile', 'uses' => 'ExampleController@check'
 ]);
+
+$router->get('/gerar-nfe', [
+    'as' => 'profile', 'uses' => '\App\Nfe\Http\Controllers\GerarNota@index'
+]);
