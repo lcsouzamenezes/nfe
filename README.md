@@ -24,3 +24,6 @@ Para parar o container basta digitar:
 
 Link uteis:
 [Consulta NFE Simplificada](http://www.nfe.fazenda.gov.br/portal/consultaRecaptcha.aspx?tipoConsulta=resumo&tipoConteudo=d09fwabTnLk=)
+
+Tutoriais:
+[Emitindo Nfe com PHP](https://imasters.com.br/back-end/emitindo-nfe-com-php)
