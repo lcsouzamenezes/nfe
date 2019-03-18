@@ -24,7 +24,7 @@ class GerarNota
 
         $std = new \stdClass();
         $std->cUF = 53; //coloque um código real e válido
-        $std->cNF = '80070008';
+        $std->cNF = rand(11111111, 99999999);
         $std->natOp = 'VENDA';
         $std->mod = 55;
         $std->serie = 1;
