@@ -6,6 +6,7 @@ use NFePHP\NFe\Make;
 use NFePHP\NFe\Tools;
 use NFePHP\Common\Certificate;
 use NFePHP\NFe\Common\Standardize;
+use NFePHP\NFe\Complements;
 
 class GerarNota
 {
@@ -28,7 +29,7 @@ class GerarNota
         $std->natOp = 'VENDA';
         $std->mod = 55;
         $std->serie = 1;
-        $std->nNF = 10;
+        $std->nNF = 307;
         $std->dhEmi = $timeZone;
         $std->dhSaiEnt = $timeZone;
         $std->tpNF = 1;
@@ -243,13 +244,40 @@ class GerarNota
         }
 
         try {
-            $protocolo = $tools->sefazConsultaRecibo($recibo);
-            $std = $st->toStd($protocolo);
-            dd($std);
+            $xmlResp = $tools->sefazConsultaRecibo($recibo);
+            $std = $st->toStd($xmlResp);
+
+            if($std->cStat=='104'){ //lote processado (tudo ok)
+                if($std->protNFe->infProt->cStat=='100'){ //Autorizado o uso da NF-e
+                    $return = [
+                        "situacao"=>"autorizada",
+                        "numeroProtocolo"=> $std->protNFe->infProt->nProt,
+                        "xmlProtocolo" => $xmlResp
+                    ];
+
+                    Complements::toAuthorize($xmlAssinado, $xmlResp);
+                    header('Content-type: text/xml; charset=UTF-8');
+                    echo $xml;
+
+                }elseif(in_array($std->protNFe->infProt->cStat,["302"])){ //DENEGADAS
+                    $return = ["situacao"=>"denegada",
+                        "numeroProtocolo"=>$std->protNFe->infProt->nProt,
+                        "motivo"=>$std->protNFe->infProt->xMotivo,
+                        "cstat"=>$std->protNFe->infProt->cStat,
+                        "xmlProtocolo"=>$xmlResp];
+                }else{ //não autorizada (rejeição)
+                    $return = ["situacao"=>"rejeitada",
+                        "motivo"=>$std->protNFe->infProt->xMotivo,
+                        "cstat"=>$std->protNFe->infProt->cStat];
+                }
+            } else { //outros erros possíveis
+                $return = ["situacao"=>"rejeitada",
+                    "motivo"=>$std->xMotivo,
+                    "cstat"=>$std->cStat];
+            }
         } catch (\Exception $e) {
             //aqui você trata possíveis exceptions da consulta
             exit($e->getMessage());
         }
-
     }
 }
