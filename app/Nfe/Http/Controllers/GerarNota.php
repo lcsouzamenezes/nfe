@@ -17,6 +17,7 @@ class GerarNota
 
         $data = new \DateTime();
         $timeZone = $data->format(\DateTime::ATOM);
+        $nNF = 5;
 
         $std->versao = '4.00';
         $std->Id = null;
@@ -29,7 +30,7 @@ class GerarNota
         $std->natOp = 'VENDA';
         $std->mod = 55;
         $std->serie = 1;
-        $std->nNF = 307;
+        $std->nNF = $nNF;
         $std->dhEmi = $timeZone;
         $std->dhSaiEnt = $timeZone;
         $std->tpNF = 1;
@@ -218,6 +219,8 @@ class GerarNota
         $CNPJPath = storage_path('app') . env('APP_CNPJ_PATH', true) . '/CNPJ01.json';
         $cnpj01 = file_get_contents($CNPJPath);
 
+        $NFEPath = storage_path('app') . env('APP_NFE_PATH', true);
+
         try {
             $certificate = Certificate::readPfx($pfx, env('APP_CART_PASSWORD', true));
             $tools = new Tools($cnpj01, $certificate);
@@ -255,9 +258,12 @@ class GerarNota
                         "xmlProtocolo" => $xmlResp
                     ];
 
+                    file_put_contents($NFEPath.'/'.$nNF.'.xml', $xml);
+
                     Complements::toAuthorize($xmlAssinado, $xmlResp);
                     header('Content-type: text/xml; charset=UTF-8');
                     echo $xml;
+
 
                 }elseif(in_array($std->protNFe->infProt->cStat,["302"])){ //DENEGADAS
                     $return = ["situacao"=>"denegada",
