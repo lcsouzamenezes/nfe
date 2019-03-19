@@ -1,80 +1,98 @@
 FORMAT: 1A
 HOST: http://polls.apiblueprint.org/
 
-# nfe
+# NF-E
 
-Polls is a simple API allowing consumers to view polls and vote in them.
+Integração com dados da sefaz com foco na Nota Fiscal Eletrônica.
 
-## Questions Collection [/questions]
+## NF-E [/nfe?codigo={codigo}]
 
-### List All Questions [GET]
+### Consultar Nota Fiscal com Codigo de Acesso [GET]
+
+Codigo é necessario codigo de acesso de 44 caracteres para retorna dados da NFE.
++ Parameters
+    + codigo (string) 
+        
++ Request
+    + Parameters
+        + codigo (string, required) 
+        
++ Response 200 (application/json)
+
+        {
+            "codigo": "12340623004804000164550000000002251000002258"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "erro": "nota fiscal eletronica não encontrada!"
+        }
+
+### Salvar dados NFE [POST]
+
+Gera e salva os dados da NF-E.
+
++ Request 200 (application/json)
+    + Attributes 
+        + cnpj: 111.111.11/0001-98 (string, required)
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
-
-### Create a New Question [POST]
-
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
-
-+ Request (application/json)
+        {
+              "message": "Salvo com sucesso"
+        }
+        
++ Response 400 (application/json)
 
         {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
+            "message": "não foi possivel gerar a NF-E!"
         }
 
-+ Response 201 (application/json)
 
-    + Headers
+## VALIDAR NFE [/validar-nfe]
+### Validar Nota Fiscal [GET]
 
-            Location: /questions/2
+Verifica junto a Sefaz a validade da NFE.
 
-    + Body
++ Response 200 (application/json)
 
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
-                ]
-            }
+        {
+            "codigo": "12340623004804000164550000000002251000002258"
+        }
+        
+
+## Extrair NF-E [/extrair-nfe]
+### Extrai  Nota Fiscal [GET]
+
+Recebe todas as notas fiscais do cnpj.
+
++ Response 200 (application/json)
+
+        {
+            "codigo": "12340623004804000164550000000002251000002258"
+        }
+        
+        
+## Download NF-E [/download-nfe]
+### Download  Nota Fiscal [GET]
+
+recebe uma nota por download.
+
++ Response 200 (application/json)
+
+        {
+            "codigo": "12340623004804000164550000000002251000002258"
+        }
+
+
+## Importar NF-E [/importar-nfe]
+### Importar  Nota Fiscal [GET]
+
+recebe uma nota por download.
+
++ Response 200 (application/json)
+
+        {
+            "codigo": "12340623004804000164550000000002251000002258"
+        }
