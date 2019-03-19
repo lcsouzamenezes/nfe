@@ -22,3 +22,7 @@ $router->get('/check', [
 $router->get('/gerar-nfe', [
     'as' => 'profile', 'uses' => '\App\Nfe\Http\Controllers\GerarNota@index'
 ]);
+
+$router->get('/download-nfe', [
+    'as' => 'profile', 'uses' => '\App\Nfe\Http\Controllers\Download@index'
+]);
