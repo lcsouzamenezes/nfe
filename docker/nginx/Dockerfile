@@ -3,7 +3,7 @@ FROM composer:1.7 as vendor
 WORKDIR /app
 
 COPY . /app
-RUN ls -la 
+RUN ls -la
 
 RUN composer install \
     --ignore-platform-reqs \
