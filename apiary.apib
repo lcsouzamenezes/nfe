@@ -1,32 +1,52 @@
 FORMAT: 1A
 HOST: http://polls.apiblueprint.org/
 
-# nfe
+# NF-E
 
-Polls is a simple API allowing consumers to view polls and vote in them.
+Integração com dados da sefaz com foco na Nota Fiscal Eletrônica.
 
-## NFE [/nfe]
+## NF-E [/nfe?codigo={codigo}]
 
 ### Consultar Nota Fiscal com Codigo de Acesso [GET]
 
 Codigo é necessario codigo de acesso de 44 caracteres para retorna dados da NFE.
-
++ Parameters
+    + codigo (string) 
+        
++ Request
+    + Parameters
+        + codigo (string, required) 
+        
 + Response 200 (application/json)
-
 
         {
             "codigo": "12340623004804000164550000000002251000002258"
         }
 
++ Response 400 (application/json)
+
+        {
+            "erro": "nota fiscal eletronica não encontrada!"
+        }
+
 ### Salvar dados NFE [POST]
 
-Salvar dados da NFE.
+Gera e salva os dados da NF-E.
+
++ Request 200 (application/json)
+    + Attributes 
+        + cnpj: 111.111.11/0001-98 (string, required)
 
 + Response 200 (application/json)
 
+        {
+              "message": "Salvo com sucesso"
+        }
+        
++ Response 400 (application/json)
 
         {
-            "codigo": "12340623004804000164550000000002251000002258"
+            "message": "não foi possivel gerar a NF-E!"
         }
 
 
@@ -40,4 +60,39 @@ Verifica junto a Sefaz a validade da NFE.
         {
             "codigo": "12340623004804000164550000000002251000002258"
         }
+        
 
+## Extrair NF-E [/extrair-nfe]
+### Extrai  Nota Fiscal [GET]
+
+Recebe todas as notas fiscais do cnpj.
+
++ Response 200 (application/json)
+
+        {
+            "codigo": "12340623004804000164550000000002251000002258"
+        }
+        
+        
+## Download NF-E [/download-nfe]
+### Download  Nota Fiscal [GET]
+
+recebe uma nota por download.
+
++ Response 200 (application/json)
+
+        {
+            "codigo": "12340623004804000164550000000002251000002258"
+        }
+
+
+## Importar NF-E [/importar-nfe]
+### Importar  Nota Fiscal [GET]
+
+recebe uma nota por download.
+
++ Response 200 (application/json)
+
+        {
+            "codigo": "12340623004804000164550000000002251000002258"
+        }

@@ -21,3 +21,9 @@ Para parar o container basta digitar:
 * [PHP 7.x](http://php.net/)
 * [Lumen 5.8](https://lumen.laravel.com/) 
 * [Composer](https://getcomposer.org/)
+
+Link uteis:
+[Consulta NFE Simplificada](http://www.nfe.fazenda.gov.br/portal/consultaRecaptcha.aspx?tipoConsulta=resumo&tipoConteudo=d09fwabTnLk=)
+
+Tutoriais:
+[Emitindo Nfe com PHP](https://imasters.com.br/back-end/emitindo-nfe-com-php)
