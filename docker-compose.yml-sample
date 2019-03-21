@@ -23,6 +23,18 @@ services:
       - .:/app
       - ./docker/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
 
+  mongo:
+    container_name: nfe-mongo
+    build:
+      context: .
+      dockerfile: docker/mongo/Dockerfile
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_DATA_DIR: /data
+    volumes:
+      - ./data:/data
+
 #    networks:
 #      static-network:
 #        ipv4_address: 172.20.0.3
