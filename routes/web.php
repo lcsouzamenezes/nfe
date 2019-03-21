@@ -28,3 +28,10 @@ $router->get('/db', function () {
     dd($users);
 
 });
+
+$router->get(
+    '/download',
+    [
+        'as' => 'download', 'uses' => '\App\Nfe\Http\Controllers\Download@get'
+    ]
+);
