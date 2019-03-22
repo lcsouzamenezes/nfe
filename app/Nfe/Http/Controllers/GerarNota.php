@@ -7,17 +7,36 @@ use NFePHP\NFe\Tools;
 use NFePHP\Common\Certificate;
 use NFePHP\NFe\Common\Standardize;
 use NFePHP\NFe\Complements;
+use Illuminate\Http\Request;
 
 class GerarNota
 {
-    public function index()
+    public function create()
+    {
+        return view('cadastrar');
+    }
+
+    public function index(Request $request)
+    {
+        $NFEPath = storage_path('app') . env('APP_NFE_PATH', true);
+        // esse seria o "handler" do diretório
+        $dir = opendir($NFEPath);
+        while (false !== ($filename = readdir($dir))) {
+        // verificando se o arquivo é .XML
+            if (substr($filename,-4) == ".xml") {
+                echo "<a href=\"$filename\">$filename</a><br>";
+            }
+        }
+    }
+
+    public function store(Request $request)
     {
         $nfe = new Make();
         $std = new \stdClass();
 
         $data = new \DateTime();
         $timeZone = $data->format(\DateTime::ATOM);
-        $nNF = 5;
+        $nNF = $request->nNF;
 
         $std->versao = '4.00';
         $std->Id = null;
@@ -48,10 +67,10 @@ class GerarNota
         $nfe->tagide($std);
 
         $std = new \stdClass();
-        $std->xNome = '';
+        $std->xNome = 'ola teeste Minc';
         $std->IE = '0790366100165';
         $std->CRT = 3;
-        $std->CNPJ = '';
+        $std->CNPJ = '32944459000130';
         $nfe->tagemit($std);
 
         $std = new \stdClass();
@@ -249,7 +268,6 @@ class GerarNota
         try {
             $xmlResp = $tools->sefazConsultaRecibo($recibo);
             $std = $st->toStd($xmlResp);
-
             if($std->cStat=='104'){ //lote processado (tudo ok)
                 if($std->protNFe->infProt->cStat=='100'){ //Autorizado o uso da NF-e
                     $return = [
