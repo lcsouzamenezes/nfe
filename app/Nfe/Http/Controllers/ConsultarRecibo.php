@@ -13,7 +13,7 @@ use App\Nfe\Http\Controllers\GerarNota;
 
 class ConsultaRecibo
 {
-    public function index(Request $request, $nRec)
+    public function index(Request $request, $recibo)
     {
         $certPath = storage_path('app') . env('APP_CERTS_PATH', true) . '/certificado.pfx';
         $pfx = file_get_contents($certPath);
@@ -31,7 +31,7 @@ class ConsultaRecibo
         try {
             $tools = new Tools($cnpj01, $certificate);
 
-            $xmlResp = $tools->sefazConsultaRecibo($nRec);
+            $xmlResp = $tools->sefazConsultaRecibo($recibo);
             //transforma o xml de retorno em um stdClass
             $st = new Standardize();
             $std = $st->toStd($xmlResp);
@@ -48,8 +48,8 @@ class ConsultaRecibo
                     $return = ["situacao" => "autorizada",
                         "numeroProtocolo" => $std->protNFe->infProt->nProt,
                         "xmlProtocolo" => $xmlResp];
-
-                    file_put_contents($NFEPath . '/' . $nRec . '.xml', $xmlResp);
+dd($recibo);
+                    file_put_contents($NFEPath . '/' . $recibo . '.xml', $xmlResp);
                 } elseif (in_array($std->protNFe->infProt->cStat, ["302"])) { //DENEGADAS
                     return $return = ["situacao" => "denegada",
                         "numeroProtocolo" => $std->protNFe->infProt->nProt,
