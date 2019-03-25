@@ -20,3 +20,9 @@ $router->get('/check', [
 
 $router->post('/gerar-nfe/{nNF}','\App\Nfe\Http\Controllers\GerarNota@index');
 
+
+$router->get('/db', function () {
+    $users = DB::collection('teste')->get();
+    dd($users);
+
+});
