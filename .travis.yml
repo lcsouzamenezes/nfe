@@ -3,7 +3,7 @@ dist: xenial
 php:
   - '7.2.15'
 before_script:
-  - pecl install mongo
+  - pecl install mongodb
   - composer install -v
 
 
