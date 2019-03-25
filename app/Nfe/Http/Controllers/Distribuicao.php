@@ -26,11 +26,9 @@ class Distribuicao
 
         $tools = new Tools($cnpj01, Certificate::readPfx($pfx, env('APP_CART_PASSWORD', true)));
 
-        //só funciona para o modelo 55
         $tools->model('55');
-        ////este serviço somente opera em ambiente de produção
         $tools->setEnvironment($ambiente);
-        //
+
         ////este numero deverá vir do banco de dados nas proximas buscas para reduzir
         ////a quantidade de documentos, e para não baixar várias vezes as mesmas coisas.
         $ultNSU = 0;
