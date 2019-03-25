@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Nfe\Http\Controllers\GerarNota;
 
-class ConsultaRecibo
+class ConsultarRecibo
 {
     public function index(Request $request, $recibo)
     {
@@ -48,7 +48,7 @@ class ConsultaRecibo
                     $return = ["situacao" => "autorizada",
                         "numeroProtocolo" => $std->protNFe->infProt->nProt,
                         "xmlProtocolo" => $xmlResp];
-dd($recibo);
+
                     file_put_contents($NFEPath . '/' . $recibo . '.xml', $xmlResp);
                 } elseif (in_array($std->protNFe->infProt->cStat, ["302"])) { //DENEGADAS
                     return $return = ["situacao" => "denegada",
