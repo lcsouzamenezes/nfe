@@ -16,7 +16,7 @@ class Distribuicao
 {
     public function get(Request $request, $ambiente)
     {
-        set_time_limit ( 600 );
+        set_time_limit(600);
 
         $certPath = storage_path('app') . env('APP_CERTS_PATH', true) . '/certificado.pfx';
         $pfx = file_get_contents($certPath);
@@ -38,7 +38,6 @@ class Distribuicao
 
         //executa a busca de DFe em loop
         while ($ultNSU <= $maxNSU) {
-
             $iCount++;
             if ($iCount >= $loopLimit) {
                 break;
