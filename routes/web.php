@@ -18,7 +18,7 @@ $router->get('/check', [
     'as' => 'profile', 'uses' => 'ExampleController@check'
 ]);
 
-$router->post('/gerar-nfe/{nNF}','\App\Nfe\Http\Controllers\GerarNota@index');
+$router->post('/gerar-nfe/{ambiente}','\App\Nfe\Http\Controllers\GerarNota@index');
 
 
 $router->get('/db', function () {

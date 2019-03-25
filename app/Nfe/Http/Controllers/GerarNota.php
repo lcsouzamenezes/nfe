@@ -8,18 +8,21 @@ use NFePHP\Common\Certificate;
 use NFePHP\NFe\Common\Standardize;
 use NFePHP\NFe\Complements;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class GerarNota
 {
 
-    public function index(Request $request)
+    public function index(Request $request, $ambiente)
     {
         $nfe = new Make();
         $std = new \stdClass();
 
         $data = new \DateTime();
         $timeZone = $data->format(\DateTime::ATOM);
-        $nNF = $request->nNF;
+        $nNF = $request->input('nNF');
+        $CNPJ = $request->input('CNPJ');
+        $IE = $request->input('IE');
 
         $std->versao = '4.00';
         $std->Id = null;
@@ -37,11 +40,11 @@ class GerarNota
         $std->dhSaiEnt = $timeZone;
         $std->tpNF = 1;
         $std->idDest = 1;
-        $std->cMunFG = 5300108; //Código de município precisa ser válido
+        $std->cMunFG = 5300108;
         $std->tpImp = 1;
         $std->tpEmis = 1;
         $std->cDV = 2;
-        $std->tpAmb = 2; // Se deixar o tpAmb como 2 você emitirá a nota em ambiente de homologação(teste) e as notas fiscais aqui não tem valor fiscal
+        $std->tpAmb = $ambiente;
         $std->finNFe = 1;
         $std->indFinal = 0;
         $std->indPres = 0;
@@ -50,10 +53,10 @@ class GerarNota
         $nfe->tagide($std);
 
         $std = new \stdClass();
-        $std->xNome = '';
-        $std->IE = '';
+        $std->xNome = 'ola teeste Minc';
+        $std->IE = $IE;
         $std->CRT = 3;
-        $std->CNPJ = '';
+        $std->CNPJ = $CNPJ;
         $nfe->tagemit($std);
 
         $std = new \stdClass();
@@ -221,8 +224,6 @@ class GerarNota
         $CNPJPath = storage_path('app') . env('APP_CNPJ_PATH', true) . '/CNPJ01.json';
         $cnpj01 = file_get_contents($CNPJPath);
 
-        $NFEPath = storage_path('app') . env('APP_NFE_PATH', true);
-
         try {
             $certificate = Certificate::readPfx($pfx, env('APP_CART_PASSWORD', true));
             $tools = new Tools($cnpj01, $certificate);
@@ -239,52 +240,12 @@ class GerarNota
             $st = new Standardize();
             $std = $st->toStd($resp);
             if ($std->cStat != 103) {
-                //erro registrar e voltar
                 exit("[$std->cStat] $std->xMotivo");
             }
-            $recibo = $std->infRec->nRec; // Vamos usar a variável $recibo para consultar o status da nota
+            return response()->json($std, 200);
         } catch (\Exception $e) {
-            //aqui você trata possiveis exceptions do envio
-            exit($e->getMessage());
-        }
-
-        try {
-            $xmlResp = $tools->sefazConsultaRecibo($recibo);
-            $std = $st->toStd($xmlResp);
-            if($std->cStat=='104'){ //lote processado (tudo ok)
-                if($std->protNFe->infProt->cStat=='100'){ //Autorizado o uso da NF-e
-                    $return = [
-                        "situacao"=>"autorizada",
-                        "numeroProtocolo"=> $std->protNFe->infProt->nProt,
-                        "xmlProtocolo" => $xmlResp
-                    ];
-
-                    file_put_contents($NFEPath.'/'.$nNF.'.xml', $xml);
-
-                    Complements::toAuthorize($xmlAssinado, $xmlResp);
-                    header('Content-type: text/xml; charset=UTF-8');
-                    echo $xml;
-
-
-                }elseif(in_array($std->protNFe->infProt->cStat,["302"])){ //DENEGADAS
-                    $return = ["situacao"=>"denegada",
-                        "numeroProtocolo"=>$std->protNFe->infProt->nProt,
-                        "motivo"=>$std->protNFe->infProt->xMotivo,
-                        "cstat"=>$std->protNFe->infProt->cStat,
-                        "xmlProtocolo"=>$xmlResp];
-                }else{ //não autorizada (rejeição)
-                    $return = ["situacao"=>"rejeitada",
-                        "motivo"=>$std->protNFe->infProt->xMotivo,
-                        "cstat"=>$std->protNFe->infProt->cStat];
-                }
-            } else { //outros erros possíveis
-                $return = ["situacao"=>"rejeitada",
-                    "motivo"=>$std->xMotivo,
-                    "cstat"=>$std->cStat];
-            }
-        } catch (\Exception $e) {
-            //aqui você trata possíveis exceptions da consulta
             exit($e->getMessage());
         }
     }
+
 }
