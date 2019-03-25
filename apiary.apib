@@ -74,10 +74,12 @@ Recebe todas as notas fiscais do cnpj.
         }
         
         
-## Download NF-E [/download-nfe]
+## Download NF-E [/download-nfe/{codigoAcesso}/{ambiente}]
 ### Download  Nota Fiscal [GET]
 
-recebe uma nota por download.
+Download da NF-E.
+
+* O Emitente da nota não pode fazer o download da nota.
 
 + Response 200 (application/json)
 
@@ -85,6 +87,18 @@ recebe uma nota por download.
             "codigo": "12340623004804000164550000000002251000002258"
         }
 
++ Response 400 (application/json)
+        
+        {
+           "attributes":{
+              "versao":"1.01"
+           },
+           "tpAmb":"2",
+           "verAplic":"1.1.9",
+           "cStat":"641",
+           "xMotivo":"Rejeicao: NF-e indisponivel para o emitente",
+           "dhResp":"2019-03-25T09:40:30-03:00"
+        }
 
 ## Importar NF-E [/importar-nfe]
 ### Importar  Nota Fiscal [GET]
