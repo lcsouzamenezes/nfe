@@ -36,41 +36,36 @@ class ConsultaRecibo
             $st = new Standardize();
             $std = $st->toStd($xmlResp);
 
-            if($std->cStat=='103') { //lote enviado
+            if ($std->cStat == '103') { //lote enviado
                 //Lote ainda não foi precessado pela SEFAZ;
             }
-            if($std->cStat=='105') { //lote em processamento
+            if ($std->cStat == '105') { //lote em processamento
                 //tente novamente mais tarde
             }
 
-            if($std->cStat=='104'){ //lote processado (tudo ok)
-                if($std->protNFe->infProt->cStat=='100'){ //Autorizado o uso da NF-e
-                    $return = ["situacao"=>"autorizada",
-                        "numeroProtocolo"=>$std->protNFe->infProt->nProt,
-                        "xmlProtocolo"=> $xmlResp];
+            if ($std->cStat == '104') { //lote processado (tudo ok)
+                if ($std->protNFe->infProt->cStat == '100') { //Autorizado o uso da NF-e
+                    $return = ["situacao" => "autorizada",
+                        "numeroProtocolo" => $std->protNFe->infProt->nProt,
+                        "xmlProtocolo" => $xmlResp];
 
-                    file_put_contents($NFEPath.'/'.$nRec.'.xml',$xmlResp);
-//                    Complements::toAuthorize($xmlAssinado, $xmlResp);
-//                    header('Content-type: text/xml; charset=UTF-8');
-//                    echo $xml;
-
-                }elseif(in_array($std->protNFe->infProt->cStat,["302"])){ //DENEGADAS
-                    return $return = ["situacao"=>"denegada",
-                        "numeroProtocolo"=>$std->protNFe->infProt->nProt,
-                        "motivo"=>$std->protNFe->infProt->xMotivo,
-                        "cstat"=>$std->protNFe->infProt->cStat,
-                        "xmlProtocolo"=>$xmlResp];
-                }else{ //não autorizada (rejeição)
-                    return $return = ["situacao"=>"rejeitada",
-                        "motivo"=>$std->protNFe->infProt->xMotivo,
-                        "cstat"=>$std->protNFe->infProt->cStat];
+                    file_put_contents($NFEPath . '/' . $nRec . '.xml', $xmlResp);
+                } elseif (in_array($std->protNFe->infProt->cStat, ["302"])) { //DENEGADAS
+                    return $return = ["situacao" => "denegada",
+                        "numeroProtocolo" => $std->protNFe->infProt->nProt,
+                        "motivo" => $std->protNFe->infProt->xMotivo,
+                        "cstat" => $std->protNFe->infProt->cStat,
+                        "xmlProtocolo" => $xmlResp];
+                } else { //não autorizada (rejeição)
+                    return $return = ["situacao" => "rejeitada",
+                        "motivo" => $std->protNFe->infProt->xMotivo,
+                        "cstat" => $std->protNFe->infProt->cStat];
                 }
             } else { //outros erros possíveis
-                return $return = ["situacao"=>"rejeitada",
-                    "motivo"=>$std->xMotivo,
-                    "cstat"=>$std->cStat];
+                return $return = ["situacao" => "rejeitada",
+                    "motivo" => $std->xMotivo,
+                    "cstat" => $std->cStat];
             }
-
         } catch (\Exception $e) {
             echo str_replace("\n", "<br/>", $e->getMessage());
         }

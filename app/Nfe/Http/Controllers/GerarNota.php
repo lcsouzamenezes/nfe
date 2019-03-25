@@ -241,49 +241,9 @@ class GerarNota
             if ($std->cStat != 103) {
                 exit("[$std->cStat] $std->xMotivo");
             }
-            $recibo = $std->infRec->nRec; // Vamos usar a variável $recibo para consultar o status da nota
-        } catch (\Exception $e) {
-            //aqui você trata possiveis exceptions do envio
-            exit($e->getMessage());
-        }
-
-        try {
-            $xmlResp = $tools->sefazConsultaRecibo($recibo);
-            $std = $st->toStd($xmlResp);
-
-            if ($std->cStat=='104') { //lote processado (tudo ok)
-                if ($std->protNFe->infProt->cStat=='100') { //Autorizado o uso da NF-e
-                    $return = [
-                        "situacao"=>"autorizada",
-                        "numeroProtocolo"=> $std->protNFe->infProt->nProt,
-                        "xmlProtocolo" => $xmlResp
-                    ];
-
-                    file_put_contents($NFEPath.'/'.$nNF.'.xml', $xml);
-
-                    Complements::toAuthorize($xmlAssinado, $xmlResp);
-                    header('Content-type: text/xml; charset=UTF-8');
-                    echo $xml;
-                } elseif (in_array($std->protNFe->infProt->cStat, ["302"])) { //DENEGADAS
-                    $return = ["situacao"=>"denegada",
-                        "numeroProtocolo"=>$std->protNFe->infProt->nProt,
-                        "motivo"=>$std->protNFe->infProt->xMotivo,
-                        "cstat"=>$std->protNFe->infProt->cStat,
-                        "xmlProtocolo"=>$xmlResp];
-                } else { //não autorizada (rejeição)
-                    $return = ["situacao"=>"rejeitada",
-                        "motivo"=>$std->protNFe->infProt->xMotivo,
-                        "cstat"=>$std->protNFe->infProt->cStat];
-                }
-            } else { //outros erros possíveis
-                $return = ["situacao"=>"rejeitada",
-                    "motivo"=>$std->xMotivo,
-                    "cstat"=>$std->cStat];
-            }
             return response()->json($std, 200);
         } catch (\Exception $e) {
             exit($e->getMessage());
         }
     }
-
 }

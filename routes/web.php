@@ -9,6 +9,8 @@ $router->get('/check', [
 
 $router->post('/gerar-nfe/{ambiente}','\App\Nfe\Http\Controllers\GerarNota@index');
 
+$router->get('/consultar-nfe/{nRec}','\App\Nfe\Http\Controllers\ConsultarNota@index');
+
 $router->get('/db', function () {
     $users = DB::collection('teste')->get();
     dd($users);
