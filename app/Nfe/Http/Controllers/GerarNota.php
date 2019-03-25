@@ -39,7 +39,7 @@ class GerarNota
         $std->tpImp = 1;
         $std->tpEmis = 1;
         $std->cDV = 2;
-        $std->tpAmb = 2; // Se deixar o tpAmb como 2 você emitirá a nota em ambiente de homologação(teste) e as notas fiscais aqui não tem valor fiscal
+        $std->tpAmb = 2;
         $std->finNFe = 1;
         $std->indFinal = 0;
         $std->indPres = 0;
@@ -225,7 +225,6 @@ class GerarNota
             $certificate = Certificate::readPfx($pfx, env('APP_CART_PASSWORD', true));
             $tools = new Tools($cnpj01, $certificate);
             $xmlAssinado = $tools->signNFe($xml);
-
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
@@ -250,8 +249,8 @@ class GerarNota
             $xmlResp = $tools->sefazConsultaRecibo($recibo);
             $std = $st->toStd($xmlResp);
 
-            if($std->cStat=='104'){ //lote processado (tudo ok)
-                if($std->protNFe->infProt->cStat=='100'){ //Autorizado o uso da NF-e
+            if ($std->cStat=='104') { //lote processado (tudo ok)
+                if ($std->protNFe->infProt->cStat=='100') { //Autorizado o uso da NF-e
                     $return = [
                         "situacao"=>"autorizada",
                         "numeroProtocolo"=> $std->protNFe->infProt->nProt,
@@ -263,15 +262,13 @@ class GerarNota
                     Complements::toAuthorize($xmlAssinado, $xmlResp);
                     header('Content-type: text/xml; charset=UTF-8');
                     echo $xml;
-
-
-                }elseif(in_array($std->protNFe->infProt->cStat,["302"])){ //DENEGADAS
+                } elseif (in_array($std->protNFe->infProt->cStat, ["302"])) { //DENEGADAS
                     $return = ["situacao"=>"denegada",
                         "numeroProtocolo"=>$std->protNFe->infProt->nProt,
                         "motivo"=>$std->protNFe->infProt->xMotivo,
                         "cstat"=>$std->protNFe->infProt->cStat,
                         "xmlProtocolo"=>$xmlResp];
-                }else{ //não autorizada (rejeição)
+                } else { //não autorizada (rejeição)
                     $return = ["situacao"=>"rejeitada",
                         "motivo"=>$std->protNFe->infProt->xMotivo,
                         "cstat"=>$std->protNFe->infProt->cStat];

@@ -42,7 +42,6 @@ class Download
             }
 
             return response()->json($e->getObj(), 200);
-
         } catch (NfeException $e) {
             return response()->json($e->getObj(), 400);
         }
