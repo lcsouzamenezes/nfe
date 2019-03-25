@@ -19,8 +19,33 @@ $router->get('/check', [
     'as' => 'profile', 'uses' => 'ExampleController@check'
 ]);
 
+$router->get('/gerar-nfe', [
+    'as' => 'profile', 'uses' => '\App\Nfe\Http\Controllers\GerarNota@index'
+]);
+
 $router->get('/db', function () {
     $users = DB::collection('teste')->get();
     dd($users);
 
 });
+
+$router->get(
+    '/download/{codigoAcesso}/{ambiente}',
+    [
+        'as' => 'download', 'uses' => '\App\Nfe\Http\Controllers\Download@get'
+    ]
+);
+
+$router->get(
+    '/consulta/{codigoAcesso}/{ambiente}',
+    [
+        'as' => 'consulta', 'uses' => '\App\Nfe\Http\Controllers\Consulta@get'
+    ]
+);
+
+$router->get(
+    '/distribuicao/{ambiente}',
+    [
+        'as' => 'distribuicao', 'uses' => '\App\Nfe\Http\Controllers\Distribuicao@get'
+    ]
+);

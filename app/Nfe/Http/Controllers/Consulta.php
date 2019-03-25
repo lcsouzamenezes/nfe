@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Nfe\Http\Controllers;
 
 use NFePHP\NFe\Make;
-use NFePHP\NFe\Tools;
+use NFePHP\NFe\Tools as Tools;
 use NFePHP\Common\Certificate;
 use NFePHP\NFe\Common\Standardize;
+use NFePHP\NFe\Complements;
+use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 
-class ExampleController extends Controller
+use \App\Nfe\Exceptions\NfeException;
+
+class Consulta
 {
-    public function __construct()
-    {
-    }
-
-    public function check()
+    public function get(Request $request, $codigoAcesso, $ambiente)
     {
         $certPath = storage_path('app') . env('APP_CERTS_PATH', true) . '/certificado.pfx';
         $pfx = file_get_contents($certPath);
@@ -22,19 +23,16 @@ class ExampleController extends Controller
         $cnpj01 = file_get_contents($CNPJPath);
 
         try {
-            $certificate = Certificate::readPfx($pfx, env('APP_CART_PASSWORD', true));
-            $tools = new Tools($cnpj01, $certificate);
+            $tools = new Tools($cnpj01, Certificate::readPfx($pfx, env('APP_CART_PASSWORD', true)));
             $tools->model('55');
+            $tools->setEnvironment($ambiente);
 
-            //guilherme
-            $chave = '';
+            $response = $tools->sefazConsultaChave($codigoAcesso);
 
-            $response = $tools->sefazConsultaChave($chave);
             $stdCl = new Standardize($response);
-            //nesse caso $std irá conter uma representação em stdClass do XML
             $std = $stdCl->toStd();
-            var_dump($std);
-            die;
+
+            return response()->json($std, 200);
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
