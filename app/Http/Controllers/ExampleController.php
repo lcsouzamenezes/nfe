@@ -10,7 +10,8 @@ use NFePHP\NFe\Common\Standardize;
 class ExampleController extends Controller
 {
     public function __construct()
-    { }
+    {
+    }
 
     public function check()
     {
@@ -34,7 +35,6 @@ class ExampleController extends Controller
             $std = $stdCl->toStd();
             var_dump($std);
             die;
-
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
