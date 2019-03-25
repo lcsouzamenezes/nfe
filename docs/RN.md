@@ -5,3 +5,8 @@ Código de Acesso
 
 
 
+O emitente da NF-E não pode fazer download da nota.
+NT2014i_v1.2 pagina 11.
+
+
+

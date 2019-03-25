@@ -30,7 +30,7 @@ $router->get('/db', function () {
 });
 
 $router->get(
-    '/download',
+    '/download/{codigoAcesso}/{ambiente}',
     [
         'as' => 'download', 'uses' => '\App\Nfe\Http\Controllers\Download@get'
     ]

@@ -8,12 +8,17 @@ use NFePHP\Common\Certificate;
 use NFePHP\NFe\Common\Standardize;
 use NFePHP\NFe\Complements;
 use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 
 use \App\Nfe\Exceptions\NfeException;
 
 class Download
 {
-    public function get()
+    /** @TODO
+     *
+     * Não foi possivel verificar um caso de sucesso por não termos acessos a nostas como interessado
+     */
+    public function get(Request $request, $codigoAcesso, $ambiente)
     {
         $code = 200;
 
@@ -25,11 +30,10 @@ class Download
 
         $tools = new Tools($cnpj01, Certificate::readPfx($pfx, env('APP_CART_PASSWORD', true)));
         $tools->model('55');
-        $tools->setEnvironment(1);
-        $chave = '35180174283375000142550010000234761182919182';
+        $tools->setEnvironment($ambiente);
 
         try {
-            $response = $tools->sefazDownload($chave);
+            $response = $tools->sefazDownload($codigoAcesso);
             $stz = new Standardize($response);
             $std = $stz->toStd();
 
@@ -37,7 +41,7 @@ class Download
                 throw new NfeException(null, null, null, $std);
             }
 
-            return response()->json($e->getObj(), 400);
+            return response()->json($e->getObj(), 200);
 
         } catch (NfeException $e) {
             return response()->json($e->getObj(), 400);
