@@ -18,3 +18,9 @@ $router->get('/', function () use ($router) {
 $router->get('/check', [
     'as' => 'profile', 'uses' => 'ExampleController@check'
 ]);
+
+$router->get('/db', function () {
+    $users = DB::collection('teste')->get();
+    dd($users);
+
+});

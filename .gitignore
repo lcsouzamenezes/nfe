@@ -5,3 +5,4 @@ Homestead.yaml
 .env
 docker-compose.yml
 composer.phar
+codigoAcesso.txt
