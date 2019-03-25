@@ -14,19 +14,9 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
-
 $router->get('/check', [
     'as' => 'profile', 'uses' => 'ExampleController@check'
 ]);
 
-$router->get('/listar-nfe', [
-    'as' => 'profile', 'uses' => '\App\Nfe\Http\Controllers\GerarNota@index'
-]);
+$router->post('/gerar-nfe/{nNF}','\App\Nfe\Http\Controllers\GerarNota@index');
 
-$router->post('/gerar-nfe','\App\Nfe\Http\Controllers\GerarNota@store');
-
-$router->get('/download-nfe', [
-    'as' => 'profile', 'uses' => '\App\Nfe\Http\Controllers\Download@index'
-]);
-
-$router->get('/gerar-nfe', '\App\Nfe\Http\Controllers\GerarNota@create');

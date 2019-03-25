@@ -11,25 +11,8 @@ use Illuminate\Http\Request;
 
 class GerarNota
 {
-    public function create()
-    {
-        return view('cadastrar');
-    }
 
     public function index(Request $request)
-    {
-        $NFEPath = storage_path('app') . env('APP_NFE_PATH', true);
-        // esse seria o "handler" do diretório
-        $dir = opendir($NFEPath);
-        while (false !== ($filename = readdir($dir))) {
-        // verificando se o arquivo é .XML
-            if (substr($filename,-4) == ".xml") {
-                echo "<a href=\"$filename\">$filename</a><br>";
-            }
-        }
-    }
-
-    public function store(Request $request)
     {
         $nfe = new Make();
         $std = new \stdClass();
@@ -67,10 +50,10 @@ class GerarNota
         $nfe->tagide($std);
 
         $std = new \stdClass();
-        $std->xNome = 'ola teeste Minc';
-        $std->IE = '0790366100165';
+        $std->xNome = '';
+        $std->IE = '';
         $std->CRT = 3;
-        $std->CNPJ = '32944459000130';
+        $std->CNPJ = '';
         $nfe->tagemit($std);
 
         $std = new \stdClass();
