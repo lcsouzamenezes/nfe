@@ -23,7 +23,6 @@ class Consulta
         $cnpj01 = file_get_contents($CNPJPath);
 
         try {
-
             $tools = new Tools($cnpj01, Certificate::readPfx($pfx, env('APP_CART_PASSWORD', true)));
             $tools->model('55');
             $tools->setEnvironment($ambiente);
@@ -34,7 +33,6 @@ class Consulta
             $std = $stdCl->toStd();
 
             return response()->json($std, 200);
-
         } catch (\Exception $e) {
             echo $e->getMessage();
         }

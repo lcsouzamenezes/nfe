@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 use \App\Nfe\Exceptions\NfeException;
 
-class Validar 
+class Validar
 {
     public function get(Request $request, $codigoAcesso, $ambiente)
     {
