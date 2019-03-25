@@ -9,6 +9,6 @@ before_script:
 
 script:
   - vendor/bin/phpunit --configuration phpunit.xml
-  - vendor/bin/phpcs  --standard=PSR2  app/ -vvv
+  - vendor/bin/phpcs  --standard=PSR2  app/ -vv
   - vendor/bin/phpmd app/ text  cleancode,codesize,controversial,design,naming,unusedcode
   - vendor/bin/phpcpd --ansi --quiet app/
