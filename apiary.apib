@@ -11,12 +11,12 @@ Integração com dados da sefaz com foco na Nota Fiscal Eletrônica.
 
 Codigo é necessario codigo de acesso de 44 caracteres para retorna dados da NFE.
 + Parameters
-    + codigo (string) 
-        
+    + codigo (string)
+
 + Request
     + Parameters
-        + codigo (string, required) 
-        
+        + codigo (string, required)
+
 + Response 200 (application/json)
 
         {
@@ -34,7 +34,7 @@ Codigo é necessario codigo de acesso de 44 caracteres para retorna dados da NFE
 Gera e salva os dados da NF-E.
 
 + Request 200 (application/json)
-    + Attributes 
+    + Attributes
         + cnpj: 111.111.11/0001-98 (string, required)
 
 + Response 200 (application/json)
@@ -42,7 +42,7 @@ Gera e salva os dados da NF-E.
         {
               "message": "Salvo com sucesso"
         }
-        
+
 + Response 400 (application/json)
 
         {
@@ -60,7 +60,7 @@ Verifica junto a Sefaz a validade da NFE.
         {
             "codigo": "12340623004804000164550000000002251000002258"
         }
-        
+
 
 ## Extrair NF-E [/extrair-nfe]
 ### Extrai  Nota Fiscal [GET]
@@ -72,8 +72,8 @@ Recebe todas as notas fiscais do cnpj.
         {
             "codigo": "12340623004804000164550000000002251000002258"
         }
-        
-        
+
+
 ## Download NF-E [/download-nfe/{codigoAcesso}/{ambiente}]
 ### Download  Nota Fiscal [GET]
 
@@ -88,7 +88,7 @@ Download da NF-E.
         }
 
 + Response 400 (application/json)
-        
+
         {
            "attributes":{
               "versao":"1.01"
@@ -109,4 +109,49 @@ recebe uma nota por download.
 
         {
             "codigo": "12340623004804000164550000000002251000002258"
+        }
+
+## Gerar NF-E [/gerar-nfe/{ambiente}]
+### Geração Nota Fiscal [POST]
+
+Geração da NF-E.
+
+* Para a geração da NF-E será preciso do cnpj e da inscrição estadual
+
++ Request 200 (application/json)
+    + Attributes
+        + cnpj: 111.111.11/0001-98 (string, required)
+        + IE: 0000366100100 (string, required)
++ Response 200 (application/json)
+
+        {
+              "message": "Salvo com sucesso"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "message": "não foi possivel gerar a NF-E!"
+        }
+
+## Consultar Recibo [/consultar-nfe/{recibo}]
+### Consultar Recibo Nota Fiscal [GET]
+
+Consultar recibo da NF-E.
+
+* Para a geração da NF-E será preciso do cnpj e da inscrição estadual
+
++ Request 200 (application/json)
+    + Attributes
+        + recibo: 533002185307626 (string, required)
++ Response 200 (application/json)
+
+        {
+              "message": "Salvo com sucesso"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "message": "rejeitada"
         }

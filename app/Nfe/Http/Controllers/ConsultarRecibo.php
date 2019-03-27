@@ -2,14 +2,11 @@
 
 namespace App\Nfe\Http\Controllers;
 
-use NFePHP\NFe\Make;
 use NFePHP\NFe\Tools;
 use NFePHP\Common\Certificate;
 use NFePHP\NFe\Common\Standardize;
 use NFePHP\NFe\Complements;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use App\Nfe\Http\Controllers\GerarNota;
 
 class ConsultarRecibo
 {
@@ -36,11 +33,11 @@ class ConsultarRecibo
             $st = new Standardize();
             $std = $st->toStd($xmlResp);
 
-            if ($std->cStat == '103') { //lote enviado
-                //Lote ainda não foi precessado pela SEFAZ;
+            if ($std->cStat == '103') {
+                //lote enviado Lote ainda não foi precessado pela SEFAZ;
             }
-            if ($std->cStat == '105') { //lote em processamento
-                //tente novamente mais tarde
+            if ($std->cStat == '105') {
+                //lote em processamento tente novamente mais tarde
             }
 
             if ($std->cStat == '104') { //lote processado (tudo ok)
