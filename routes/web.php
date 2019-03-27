@@ -9,10 +9,10 @@ $router->get('/check', [
 
 $router->post('/gerar-nfe/{ambiente}','\App\Nfe\Http\Controllers\GerarNota@index');
 
-$router->get('/consultar-nfe/{recibo}','\App\Nfe\Http\Controllers\ConsultarRecibo@index');
+$router->get('/consultar-recibo/{recibo}/{ambiente}','\App\Nfe\Http\Controllers\ConsultarRecibo@index');
 
 $router->get('/db', function () {
-    $users = DB::collection('teste')->get();
+    $users = DB::collection('notas')->get();
     dd($users);
 
 });
@@ -25,9 +25,9 @@ $router->get(
 );
 
 $router->get(
-    '/consulta/{codigoAcesso}/{ambiente}',
+    '/consultar/{codigoAcesso}/{ambiente}',
     [
-        'as' => 'consulta', 'uses' => '\App\Nfe\Http\Controllers\Consulta@get'
+        'as' => 'consulta', 'uses' => '\App\Nfe\Http\Controllers\Consultar@get'
     ]
 );
 
