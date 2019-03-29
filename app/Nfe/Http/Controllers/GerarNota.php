@@ -9,6 +9,7 @@ use NFePHP\NFe\Common\Standardize;
 use NFePHP\NFe\Complements;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\NfeModel;
 
 class GerarNota
 {
@@ -224,6 +225,8 @@ class GerarNota
         $CNPJPath = storage_path('app') . env('APP_CNPJ_PATH', true) . '/CNPJ01.json';
         $cnpj01 = file_get_contents($CNPJPath);
 
+        $NFEPath = storage_path('app') . env('APP_NEF_PATH', true);
+
         try {
             $certificate = Certificate::readPfx($pfx, env('APP_CART_PASSWORD', true));
             $tools = new Tools($cnpj01, $certificate);
@@ -238,10 +241,23 @@ class GerarNota
 
             $st = new Standardize();
             $std = $st->toStd($resp);
+//            $xmlJson = $st->toJson($xml);
+
+            $xmlTojson = simplexml_load_string($xml);
+            $json = json_encode($xmlTojson);
+            $xmlJson = json_decode($json, true);
+
             if ($std->cStat != 103) {
                 exit("[$std->cStat] $std->xMotivo");
             }
+
+            $nfe = new NfeModel();
+            $nfe->nfe = $xmlJson;
+            $nfe->save();
+
+            file_put_contents($NFEPath.'/'.$nNF.'.xml', $xml);
             return response()->json($std, 200);
+
         } catch (\Exception $e) {
             exit($e->getMessage());
         }

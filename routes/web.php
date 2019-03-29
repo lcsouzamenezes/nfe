@@ -12,9 +12,8 @@ $router->post('/gerar-nfe/{ambiente}','\App\Nfe\Http\Controllers\GerarNota@index
 $router->get('/consultar-recibo/{recibo}/{ambiente}','\App\Nfe\Http\Controllers\ConsultarRecibo@index');
 
 $router->get('/db', function () {
-    $users = DB::collection('notas')->get();
-    dd($users);
-
+    $user = \App\NfeModel::all();
+    dd($user);
 });
 
 $router->get(
