@@ -45,7 +45,7 @@ class GerarNota
         $std->tpImp = 1;
         $std->tpEmis = 1;
         $std->cDV = 2;
-        $std->tpAmb = 2;
+        $std->tpAmb = $ambiente;
         $std->finNFe = 1;
         $std->indFinal = 0;
         $std->indPres = 0;
@@ -241,7 +241,6 @@ class GerarNota
 
             $st = new Standardize();
             $std = $st->toStd($resp);
-//            $xmlJson = $st->toJson($xml);
 
             $xmlTojson = simplexml_load_string($xml);
             $json = json_encode($xmlTojson);
@@ -252,7 +251,7 @@ class GerarNota
             }
 
             $nfe = new NfeModel();
-            $nfe->nfe = $xmlJson;
+            $nfe->infNFe = $xmlJson['infNFe'];
             $nfe->save();
 
             file_put_contents($NFEPath.'/'.$nNF.'.xml', $xml);
