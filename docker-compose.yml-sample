@@ -35,6 +35,30 @@ services:
     volumes:
       - ./data:/data
 
+  ## Documentação da API altamente recomendado para desenvolvedores
+  api-doc:
+    container_name: nfe-api-doc
+    image: quay.io/bukalapak/snowboard:latest
+    # build:
+    #   context: .
+    #   dockerfile: docker/mongo/Dockerfile
+    entrypoint:
+      - snowboard
+      - --watch
+      - --watch-interval
+      - 50ms
+      - html
+      - -o
+      - output.html
+      - -b
+      - 0.0.0.0:8088
+      - -s
+      - apiary.apib
+    ports:
+      - "8088:8088"
+    volumes:
+      - .:/doc
+
 #    networks:
 #      static-network:
 #        ipv4_address: 172.20.0.3
