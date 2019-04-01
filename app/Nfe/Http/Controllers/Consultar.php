@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 use \App\Nfe\Exceptions\NfeException;
 
-class Consulta
+class Consultar
 {
     public function get(Request $request, $codigoAcesso, $ambiente)
     {
