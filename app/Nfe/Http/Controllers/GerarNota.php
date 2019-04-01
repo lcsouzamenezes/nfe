@@ -224,6 +224,8 @@ class GerarNota
         $CNPJPath = storage_path('app') . env('APP_CNPJ_PATH', true) . '/CNPJ01.json';
         $cnpj01 = file_get_contents($CNPJPath);
 
+        $NFEPath = storage_path('app') . env('APP_NFE_PATH', true);
+
         try {
             $certificate = Certificate::readPfx($pfx, env('APP_CART_PASSWORD', true));
             $tools = new Tools($cnpj01, $certificate);
@@ -241,6 +243,9 @@ class GerarNota
             if ($std->cStat != 103) {
                 exit("[$std->cStat] $std->xMotivo");
             }
+
+            file_put_contents($NFEPath.'/'.$nNF.'.xml', $xml);
+
             return response()->json($std, 200);
         } catch (\Exception $e) {
             exit($e->getMessage());
