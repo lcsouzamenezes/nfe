@@ -256,7 +256,6 @@ class GerarNota
 
             file_put_contents($NFEPath.'/'.$nNF.'.xml', $xml);
             return response()->json($std, 200);
-
         } catch (\Exception $e) {
             exit($e->getMessage());
         }

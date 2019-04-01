@@ -34,7 +34,6 @@ class ConsultarRecibo
             $std = $st->toStd($xmlResp);
 
             return response()->json($std, 200);
-
         } catch (\Exception $e) {
             echo str_replace("\n", "<br/>", $e->getMessage());
         }
