@@ -9,7 +9,6 @@ use NFePHP\NFe\Common\Standardize;
 use NFePHP\NFe\Complements;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\NfeModel;
 
 class GerarNota
 {
@@ -225,7 +224,7 @@ class GerarNota
         $CNPJPath = storage_path('app') . env('APP_CNPJ_PATH', true) . '/CNPJ01.json';
         $cnpj01 = file_get_contents($CNPJPath);
 
-        $NFEPath = storage_path('app') . env('APP_NEF_PATH', true);
+        $NFEPath = storage_path('app') . env('APP_NFE_PATH', true);
 
         try {
             $certificate = Certificate::readPfx($pfx, env('APP_CART_PASSWORD', true));
@@ -256,7 +255,6 @@ class GerarNota
 
             file_put_contents($NFEPath.'/'.$nNF.'.xml', $xml);
             return response()->json($std, 200);
-
         } catch (\Exception $e) {
             exit($e->getMessage());
         }
