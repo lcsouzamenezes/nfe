@@ -15,6 +15,7 @@ class ExampleController extends Controller
 
     public function check()
     {
+        phpinfo();die;
         $certPath = storage_path('app') . env('APP_CERTS_PATH', true) . '/certificado.pfx';
         $pfx = file_get_contents($certPath);
 

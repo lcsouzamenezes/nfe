@@ -9,12 +9,14 @@ use NFePHP\NFe\Common\Standardize;
 use NFePHP\NFe\Complements;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\NfeModel;
 
 class GerarNota
 {
 
     public function index(Request $request, $ambiente)
     {
+//        dd($ambiente, $request);
         $nfe = new Make();
         $std = new \stdClass();
 
@@ -217,7 +219,6 @@ class GerarNota
         $nfe->tagdetPag($std);
 
         $xml = $nfe->getXML(); // O conteúdo do XML fica armazenado na variável $xml
-
         $certPath = storage_path('app') . env('APP_CERTS_PATH', true) . '/certificado.pfx';
         $pfx = file_get_contents($certPath);
 
@@ -248,7 +249,6 @@ class GerarNota
             if ($std->cStat != 103) {
                 exit("[$std->cStat] $std->xMotivo");
             }
-
             $nfe = new NfeModel();
             $nfe->infNFe = $xmlJson['infNFe'];
             $nfe->save();
