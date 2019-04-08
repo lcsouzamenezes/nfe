@@ -36,3 +36,10 @@ $router->get(
         'as' => 'distribuicao', 'uses' => '\App\Nfe\Http\Controllers\Distribuicao@get'
     ]
 );
+
+$router->get(
+    '/nota',
+    [
+        'as' => 'nota', 'uses' => '\App\Nfe\Http\Controllers\Nota@index'
+    ]
+);
