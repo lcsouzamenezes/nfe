@@ -36,3 +36,10 @@ $router->get(
         'as' => 'distribuicao', 'uses' => '\App\Nfe\Http\Controllers\Distribuicao@get'
     ]
 );
+
+$router->get(
+    '/buscar-notas/{nNF}',
+    [
+        'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\BuscarDandosNFE@buscarDadosNfe'
+    ]
+);

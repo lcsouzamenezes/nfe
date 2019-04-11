@@ -16,6 +16,7 @@ class GerarNota
 
     public function index(Request $request, $ambiente)
     {
+//        dd($ambiente, $request);
         $nfe = new Make();
         $std = new \stdClass();
 
