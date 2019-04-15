@@ -8,7 +8,7 @@ use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 class NfeModel extends Eloquent
 {
     protected $connection = 'mongodb';
-    protected $collection = 'dados_notas';
+    protected $collection = 'nfe';
     /**
      * The attributes that are mass assignable.
      *
