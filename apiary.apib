@@ -155,3 +155,25 @@ Consultar recibo da NF-E.
         {
             "message": "rejeitada"
         }
+
+## Busca Dados da NFE [/buscar-notas/{nNF}]
+### Retorna os dados da NFE  [GET]
+
+Retorna todos os dados da NF-E.
+
+* Para o retorno dos dados da NF-E será preciso do nNF
+
++ Request 200 (application/json)
+    + Attributes
+        + nFE: 10 (string, required)
++ Response 200 (application/json)
+
+        {
+              "message": "sucesso"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "message": "não foi possivel localizar a NF-E!"
+        }
