@@ -43,3 +43,10 @@ $router->get(
         'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\BuscarDandosNFE@buscarDadosNfe'
     ]
 );
+
+$router->get(
+    '/listar-notas',
+    [
+        'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\ListarNotas@listarNotas'
+    ]
+);
