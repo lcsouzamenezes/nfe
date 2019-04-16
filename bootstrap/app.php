@@ -27,6 +27,8 @@ $app = new Laravel\Lumen\Application(
 
 $app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
 
+$app->register('Sentry\Laravel\ServiceProvider');
+
 $app->withFacades();
 
 $app->withEloquent();
