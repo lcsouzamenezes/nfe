@@ -15,7 +15,7 @@ class BuscarDandosNFE
 {
     public function buscarDadosNfe($nNF)
     {
-        $nota = NfeModel::where('infNFe.ide.nNF', $nNF)->get();
+        $nota = NfeModel::where('_id', $nNF)->first();
         return $nota;
     }
 }
