@@ -218,14 +218,13 @@ class GerarNota
         $nfe->tagdetPag($std);
 
         $xml = $nfe->getXML(); // O conteúdo do XML fica armazenado na variável $xml
-
         $certPath = storage_path('app') . env('APP_CERTS_PATH', true) . '/certificado.pfx';
         $pfx = file_get_contents($certPath);
 
         $CNPJPath = storage_path('app') . env('APP_CNPJ_PATH', true) . '/CNPJ01.json';
         $cnpj01 = file_get_contents($CNPJPath);
 
-        $NFEPath = storage_path('app') . env('APP_NEF_PATH', true);
+        $NFEPath = storage_path('app') . env('APP_NFE_PATH', true);
 
         try {
             $certificate = Certificate::readPfx($pfx, env('APP_CART_PASSWORD', true));
@@ -242,19 +241,19 @@ class GerarNota
             $st = new Standardize();
             $std = $st->toStd($resp);
 
-            $xmlTojson = simplexml_load_string($xml);
+            $xmlTojson = simplexml_load_string($xmlAssinado);
             $json = json_encode($xmlTojson);
             $xmlJson = json_decode($json, true);
 
             if ($std->cStat != 103) {
                 exit("[$std->cStat] $std->xMotivo");
             }
-
             $nfe = new NfeModel();
             $nfe->infNFe = $xmlJson['infNFe'];
+            $nfe->DigestValue = $xmlJson['Signature']['SignedInfo']['Reference']['DigestValue'];
             $nfe->save();
 
-            file_put_contents($NFEPath.'/'.$nNF.'.xml', $xml);
+            file_put_contents($NFEPath.'/'.$nNF.'.xml', $xmlAssinado);
             return response()->json($std, 200);
         } catch (\Exception $e) {
             exit($e->getMessage());
