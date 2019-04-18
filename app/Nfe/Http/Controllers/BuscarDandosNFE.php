@@ -13,9 +13,9 @@ use App\NfeModel;
 
 class BuscarDandosNFE
 {
-    public function buscarDadosNfe($nNF)
+    public function buscarDadosNfe($id)
     {
-        $nota = NfeModel::where('_id', $nNF)->first();
+        $nota = NfeModel::where('_id', $id)->first();
         return $nota;
     }
 }

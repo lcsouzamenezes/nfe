@@ -38,7 +38,7 @@ $router->get(
 );
 
 $router->get(
-    '/buscar-notas/{nNF}',
+    '/buscar-notas/{id}',
     [
         'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\BuscarDandosNFE@buscarDadosNfe'
     ]
