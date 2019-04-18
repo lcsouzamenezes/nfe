@@ -156,16 +156,33 @@ Consultar recibo da NF-E.
             "message": "rejeitada"
         }
 
-## Busca Dados da NFE [/buscar-notas/{nNF}]
+## Listar NFE [/listar-notas]
+### Lista todas NFE  [GET]
+
+Retorna lista de todas as NF-Es.
+
++ Response 200 (application/json)
+
+        {
+            "codigo": "12340623004804000164550000000002251000002258"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "message": "não foi possivel localizar a NF-E!"
+        }
+
+## Busca Dados da NFE [/buscar-notas/{id}]
 ### Retorna os dados da NFE  [GET]
 
 Retorna todos os dados da NF-E.
 
-* Para o retorno dos dados da NF-E será preciso do nNF
+* Para o retorno dos dados da NF-E será preciso do _id
 
 + Request 200 (application/json)
     + Attributes
-        + nFE: 10 (string, required)
+        + id: 5caf8125d75b6a00075c1d40 (string, required)
 + Response 200 (application/json)
 
         {
