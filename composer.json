@@ -9,6 +9,7 @@
         "jenssegers/mongodb": "^3.5",
         "laravel/lumen-framework": "5.8.*",
         "nfephp-org/sped-nfe": "^5.0",
+        "sentry/sentry-laravel": "^1.0",
         "vlucas/phpdotenv": "3.x"
     },
     "require-dev": {
