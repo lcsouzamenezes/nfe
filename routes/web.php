@@ -50,3 +50,5 @@ $router->get(
         'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\ListarNotas@listarNotas'
     ]
 );
+
+$router->post('/criar-nfe/{ambiente}','\App\Nfe\Http\Controllers\CriarNotaFiscal@index');
