@@ -50,3 +50,12 @@ $router->get(
         'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\ListarNotas@listarNotas'
     ]
 );
+
+$router->group(['middleware' => 'jwt'], function () use ($router) {
+    $router->get(
+        '/user',
+        [
+            'uses' => 'ExampleController@check'
+        ]
+    );
+});
