@@ -11,11 +11,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\NfeModel;
 
-class BuscarDandosNFE
+class ListarNotas
 {
-    public function buscarDadosNfe($id)
+    public function listarNotas()
     {
-        $nota = NfeModel::where('_id', $id)->first();
-        return $nota;
+        $notas = NfeModel::all();
+        return $notas;
     }
 }
