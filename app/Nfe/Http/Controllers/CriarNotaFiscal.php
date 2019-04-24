@@ -22,41 +22,27 @@ class CriarNotaFiscal
         $data = new \DateTime();
         $timeZone = $data->format(\DateTime::ATOM);
         $nNF = $request->input('nNF');
-        $CNPJ = $request->input('CNPJ');
-        $IE = $request->input('IE');
 
         $natOp = $request->input('natOp');
 
+        $CNPJPath = storage_path('app') . env('APP_CNPJ_PATH', true) . '/CNPJ01.json';
+        $dadosCnpj = file_get_contents($CNPJPath);
+        $cnpj = json_decode($dadosCnpj);
 
         $naturezaOp = $request->input('natOp');
+
         //destinatario
-        $dadosDestinatario = [];
-        $dadosDestinatario['nomeEmpresaDest']  = $request->input('xNome');
-        $dadosDestinatario['logradouroDest'] = $request->input('xLgr');
-        $dadosDestinatario['nroDest'] =  $request->input('nro');
-        $dadosDestinatario['bairroDest'] =  $request->input('xBairro');
-        $dadosDestinatario['munDest'] =  $request->input('xMun');
-        $dadosDestinatario['cepDest'] =  $request->input('CEP');
-        $dadosDestinatario['ufDest'] =  $request->input('UF');
+        $nomeEmpresaDest  = $request->input('xNome');
+        $logradouroDest = $request->input('xLgr');
+        $nroDest =  $request->input('nro');
+        $bairroDest =  $request->input('xBairro');
+        $munDest =  $request->input('xMun');
+        $cepDest =  $request->input('CEP');
+        $ufDest =  $request->input('UF');
 
         //produtos
         $vProd = $request->input('vProd');
         $nomeProduto = $request->input('xProd');
-
-        switch ($naturezaOp){
-            case 1:
-                echo 'VENDA';
-                break;
-            case 2:
-                echo 'COMPRA';
-                break;
-            case 3:
-                echo 'TRANSFÊRENCIA';
-                break;
-            default:
-                echo '';
-
-        }
 
         $std->versao = '4.00';
         $std->Id = null;
@@ -87,39 +73,39 @@ class CriarNotaFiscal
         $nfe->tagide($std);
 
         $std = new \stdClass();
-        $std->xNome = 'Ministério da Cidadania';
-        $std->IE = $IE;
+        $std->xNome =  $cnpj->razaosocial;
+        $std->IE = $cnpj->IE;
         $std->CRT = 3;
-        $std->CNPJ = $CNPJ;
+        $std->CNPJ = $cnpj->cnpj;
         $nfe->tagemit($std);
 
         $std = new \stdClass();
-        $std->xLgr = "Setor de Múltiplas Atividades Sul";
-        $std->nro = '3';
-        $std->xBairro = 'Asa Sul';
-        $std->cMun = 5300108; //Código de município precisa ser válido e igual o  cMunFG
-        $std->xMun = 'Brasilia';
-        $std->UF = 'DF';
-        $std->CEP = '70297400';
+        $std->xLgr = $cnpj->bairro;
+        $std->nro = '';
+        $std->xBairro = $cnpj->bairro;
+        $std->cMun = $cnpj->ibge; //Código de município precisa ser válido e igual o  cMunFG
+        $std->xMun = $cnpj->localidade;
+        $std->UF = $cnpj->siglaUF;
+        $std->CEP = $cnpj->cep;
         $std->cPais = '1058';
-        $std->xPais = 'BRASIL';
+        $std->xPais = $cnpj->pais;
         $nfe->tagenderEmit($std);
 
         //destinatário
         $stdDestinatario = new \stdClass();
-        $stdDestinatario->xNome = $dadosDestinatario['nomeEmpresaDest'];
+        $stdDestinatario->xNome = $nomeEmpresaDest;
         $stdDestinatario->indIEDest = 2; //2=Contribuinte isento de Inscrição no cadastro de Contribuintes do ICMS;
         $stdDestinatario->IE = '';
         $stdDestinatario->CPF = '02014705477';
         $nfe->tagdest($stdDestinatario);
 
         $std = new \stdClass();
-        $std->xLgr = $dadosDestinatario['logradouroDest'];
-        $std->nro = $dadosDestinatario['nroDest'] ;
-        $std->xBairro = $dadosDestinatario['bairroDest'];
-        $std->xMun = $dadosDestinatario['munDest'];
-        $std->UF = $dadosDestinatario['ufDest'];
-        $std->CEP = $dadosDestinatario['cepDest'];
+        $std->xLgr = $logradouroDest;
+        $std->nro = $nroDest ;
+        $std->xBairro = $bairroDest;
+        $std->xMun = $munDest;
+        $std->UF = $ufDest;
+        $std->CEP = $cepDest;
         $std->cPais = '1058';
         $std->xPais = 'BRASIL';
         $nfe->tagenderDest($std);
