@@ -34,6 +34,7 @@ class CriarNotaFiscal
         //destinatario
         $nomeEmpresaDest  = $request->input('xNome');
         $logradouroDest = $request->input('xLgr');
+        $cpfDest = $request->input('CPF');
         $nroDest =  $request->input('nro');
         $bairroDest =  $request->input('xBairro');
         $munDest =  $request->input('xMun');
@@ -43,6 +44,10 @@ class CriarNotaFiscal
         //produtos
         $vProd = $request->input('vProd');
         $nomeProduto = $request->input('xProd');
+        $qtdComercial = $request->input('qCom');
+        $qtdTributavel = $request->input('qTrib');
+        $valorUnitarioComercial = $request->input('vUnCom');
+        $valorUnitarioTributario = $request->input('vUnTrib');
 
         $std->versao = '4.00';
         $std->Id = null;
@@ -59,15 +64,15 @@ class CriarNotaFiscal
         $std->dhEmi = $timeZone;
         $std->dhSaiEnt = $timeZone;
         $std->tpNF = 1;
-        $std->idDest = 1; //tipo da operação 1=Operação interna; 2=Operação interestadual; 3=Operação com exterior.
-        $std->cMunFG = 5300108;
+        $std->idDest = 1; // Destino da operação1=Operação interna; 2=Operação interestadual; 3=Operação com exterior.
+        $std->cMunFG = '5300108';
         $std->tpImp = 1;
         $std->tpEmis = 1;
         $std->cDV = 2;
         $std->tpAmb = $ambiente;
         $std->finNFe = 1;
         $std->indFinal = 0;
-        $std->indPres = 0; //Indicador de presença do comprador no
+        $std->indPres = 0; // Presença do Comprador Indicador de presença do comprador no
         $std->procEmi = '0';
         $std->verProc = 1;
         $nfe->tagide($std);
@@ -80,14 +85,14 @@ class CriarNotaFiscal
         $nfe->tagemit($std);
 
         $std = new \stdClass();
-        $std->xLgr = $cnpj->bairro;
-        $std->nro = '';
+        $std->xLgr = $cnpj->logradouro;
+        $std->nro = '203';
         $std->xBairro = $cnpj->bairro;
         $std->cMun = $cnpj->ibge; //Código de município precisa ser válido e igual o  cMunFG
         $std->xMun = $cnpj->localidade;
         $std->UF = $cnpj->siglaUF;
         $std->CEP = $cnpj->cep;
-        $std->cPais = '1058';
+        $std->cPais = $cnpj->codPais;
         $std->xPais = $cnpj->pais;
         $nfe->tagenderEmit($std);
 
@@ -96,13 +101,14 @@ class CriarNotaFiscal
         $stdDestinatario->xNome = $nomeEmpresaDest;
         $stdDestinatario->indIEDest = 2; //2=Contribuinte isento de Inscrição no cadastro de Contribuintes do ICMS;
         $stdDestinatario->IE = '';
-        $stdDestinatario->CPF = '02014705477';
+        $stdDestinatario->CPF = $cpfDest;
         $nfe->tagdest($stdDestinatario);
 
         $std = new \stdClass();
         $std->xLgr = $logradouroDest;
-        $std->nro = $nroDest ;
+        $std->nro = $nroDest;
         $std->xBairro = $bairroDest;
+        $std->cMun = 5300108;
         $std->xMun = $munDest;
         $std->UF = $ufDest;
         $std->CEP = $cepDest;
@@ -111,23 +117,23 @@ class CriarNotaFiscal
         $nfe->tagenderDest($std);
 
         //produtos
-        $std = new \stdClass();
-        $std->item = 1;
-        $std->cEAN = 'SEM GTIN';
-        $std->cEANTrib = 'SEM GTIN';
-        $std->cProd = '0001';
-        $std->xProd = $nomeProduto;
-        $std->NCM = '84669330';
-        $std->CFOP = '5102';
-        $std->uCom = 'PÇ';
-        $std->qCom = '1.0000';
-        $std->vUnCom = '10.99';
-        $std->vProd = $vProd;
-        $std->uTrib = 'PÇ';
-        $std->qTrib = '1.0000';
-        $std->vUnTrib = '10.99';
-        $std->indTot = 1;
-        $nfe->tagprod($std);
+        $stdProd = new \stdClass();
+        $stdProd->item = 1;
+        $stdProd->cEAN = 'SEM GTIN';
+        $stdProd->cEANTrib = 'SEM GTIN';
+        $stdProd->cProd = '0001';
+        $stdProd->xProd = $nomeProduto;
+        $stdProd->NCM = '84669330';
+        $stdProd->CFOP = '5102';
+        $stdProd->uCom = 'PÇ';
+        $stdProd->qCom = $qtdComercial;
+        $stdProd->qTrib = $qtdTributavel;
+        $stdProd->uTrib = 'PÇ';
+        $stdProd->vUnCom = $valorUnitarioComercial;
+        $stdProd->vUnTrib = $valorUnitarioTributario;
+        $stdProd->vProd = ($stdProd->qTrib * $stdProd->vUnTrib);
+        $stdProd->indTot = 1;
+        $nfe->tagprod($stdProd);
 
         $std = new \stdClass();
         $std->item = 1;
@@ -185,7 +191,7 @@ class CriarNotaFiscal
         $std->vICMSDeson = 0.00;
         $std->vBCST = 0.00;
         $std->vST = 0.00;
-        $std->vProd = 10.99;
+        $std->vProd = ($stdProd->qTrib * $stdProd->vUnTrib);
         $std->vFrete = 0.00;
         $std->vSeg = 0.00;
         $std->vDesc = 0.00;
@@ -194,7 +200,7 @@ class CriarNotaFiscal
         $std->vPIS = 0.00;
         $std->vCOFINS = 0.00;
         $std->vOutro = 0.00;
-        $std->vNF = 11.03;
+        $std->vNF = ($std->vProd - $std->vDesc - $std->vICMSDeson + $std->vST + $std->vFrete + $std->vSeg + $std->vOutro + $std->vII + $std->vIPI);
         $std->vTotTrib = 0.00;
         $nfe->tagICMSTot($std);
 
@@ -232,8 +238,8 @@ class CriarNotaFiscal
         $std = new \stdClass();
         $std->indPag = 0;
         $std->tPag = "01"; //Forma de pagamento
-        $std->vPag = 10.99;
-        $std->indPag=0;
+        $std->vPag = $stdProd->vProd;
+        $std->indPag = 0;
         $nfe->tagdetPag($std);
 
         $xml = $nfe->getXML(); // O conteúdo do XML fica armazenado na variável $xml
