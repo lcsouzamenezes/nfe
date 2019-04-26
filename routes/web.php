@@ -59,3 +59,10 @@ $router->group(['middleware' => 'jwt'], function () use ($router) {
         ]
     );
 });
+
+$router->get(
+    '/conta/usuario/{token}',
+    [
+        'as' => 'usuario', 'uses' => '\App\Conta\Http\Controllers\Autenticacao@usuario'
+    ]
+);
