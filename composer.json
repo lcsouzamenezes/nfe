@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=7.1.3",
+        "firebase/php-jwt": "^5.0",
         "jenssegers/mongodb": "^3.5",
         "laravel/lumen-framework": "5.8.*",
         "nfephp-org/sped-nfe": "^5.0",
