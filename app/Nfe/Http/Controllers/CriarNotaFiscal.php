@@ -112,9 +112,13 @@ class CriarNotaFiscal
         $std->xMun = $munDest;
         $std->UF = $ufDest;
         $std->CEP = $cepDest;
-        $std->cPais = '1058';
-        $std->xPais = 'BRASIL';
+        $std->cPais = $cnpj->codPais;
+        $std->xPais = $cnpj->pais;
         $nfe->tagenderDest($std);
+
+        $std = new \stdClass();
+        $std->CNPJ = $cnpj->cnpjMinc; //indicar um CNPJ ou CPF
+        $nfe->tagautXML($std);
 
         //produtos
         $stdProd = new \stdClass();
@@ -131,8 +135,9 @@ class CriarNotaFiscal
         $stdProd->uTrib = 'PÇ';
         $stdProd->vUnCom = $valorUnitarioComercial;
         $stdProd->vUnTrib = $valorUnitarioTributario;
-        $stdProd->vProd = ($stdProd->qTrib * $stdProd->vUnTrib);
+        $stdProd->vProd = number_format(($stdProd->qTrib * $stdProd->vUnTrib), 2,  '.', '');
         $stdProd->indTot = 1;
+//        $stdProd->vFrete = number_format("12.88", 2, '.', '');
         $nfe->tagprod($stdProd);
 
         $std = new \stdClass();
@@ -140,15 +145,15 @@ class CriarNotaFiscal
         $std->vTotTrib = 10.99;
         $nfe->tagimposto($std);
 
-        $std = new \stdClass();
-        $std->item = 1;
-        $std->orig = 0;
-        $std->CST = '00';
-        $std->modBC = 0;
-        $std->vBC = '0.20';
-        $std->pICMS = '18.0000';
-        $std->vICMS = '0.04';
-        $nfe->tagICMS($std);
+        $stdICMS = new \stdClass();
+        $stdICMS->item = 1;
+        $stdICMS->orig = 0;
+        $stdICMS->CST = '00';
+        $stdICMS->modBC = 0;
+        $stdICMS->vBC = number_format($stdProd->vProd, 2, '.', '');
+        $stdICMS->pICMS = '12';
+        $stdICMS->vICMS = number_format($stdICMS->vBC *  ($stdICMS->pICMS / 100),2);
+        $nfe->tagICMS($stdICMS);
 
         $std = new \stdClass();
         $std->item = 1;
@@ -169,15 +174,7 @@ class CriarNotaFiscal
 
         $std = new \stdClass();
         $std->item = 1;
-        $std->vCOFINS = 0;
-        $std->vBC = 0;
-        $std->pCOFINS = 0;
-
-        $nfe->tagCOFINSST($std);
-
-        $std = new \stdClass();
-        $std->item = 1;
-        $std->CST = '01';
+        $std->CST = '07';
         $std->vBC = 0;
         $std->pCOFINS = 0;
         $std->vCOFINS = 0;
@@ -185,24 +182,24 @@ class CriarNotaFiscal
         $std->vAliqProd = 0;
         $nfe->tagCOFINS($std);
 
-        $std = new \stdClass();
-        $std->vBC = '0.20';
-        $std->vICMS = 0.04;
-        $std->vICMSDeson = 0.00;
-        $std->vBCST = 0.00;
-        $std->vST = 0.00;
-        $std->vProd = ($stdProd->qTrib * $stdProd->vUnTrib);
-        $std->vFrete = 0.00;
-        $std->vSeg = 0.00;
-        $std->vDesc = 0.00;
-        $std->vII = 0.00;
-        $std->vIPI = 0.00;
-        $std->vPIS = 0.00;
-        $std->vCOFINS = 0.00;
-        $std->vOutro = 0.00;
-        $std->vNF = ($std->vProd - $std->vDesc - $std->vICMSDeson + $std->vST + $std->vFrete + $std->vSeg + $std->vOutro + $std->vII + $std->vIPI);
-        $std->vTotTrib = 0.00;
-        $nfe->tagICMSTot($std);
+        $stdIMCStot = new \stdClass();
+        $stdIMCStot->vBC = number_format($stdProd->vProd, 2, '.', '');
+        $stdIMCStot->vICMS = $stdICMS->vICMS;
+        $stdIMCStot->vICMSDeson = 0.00;
+        $stdIMCStot->vBCST = 0.00;
+        $stdIMCStot->vST = 0.00;
+        $stdIMCStot->vProd = ($stdProd->qTrib * $stdProd->vUnTrib);
+        $stdIMCStot->vFrete = $stdProd->vFrete;
+        $stdIMCStot->vSeg = 0.00;
+        $stdIMCStot->vDesc = 0.00;
+        $stdIMCStot->vII = 0.00;
+        $stdIMCStot->vIPI = 0.00;
+        $stdIMCStot->vPIS = 0.00;
+        $stdIMCStot->vCOFINS = 0.00;
+        $stdIMCStot->vOutro = 0.00;
+        $stdIMCStot->vNF = ($stdIMCStot->vProd - $stdIMCStot->vDesc - $stdIMCStot->vICMSDeson + $stdIMCStot->vST + $stdIMCStot->vFrete + $stdIMCStot->vSeg + $stdIMCStot->vOutro + $stdIMCStot->vII + $stdIMCStot->vIPI);
+        $stdIMCStot->vTotTrib = 0.00;
+        $nfe->tagICMSTot($stdIMCStot);
 
         $std = new \stdClass();
         $std->modFrete = 1;
@@ -238,7 +235,7 @@ class CriarNotaFiscal
         $std = new \stdClass();
         $std->indPag = 0;
         $std->tPag = "01"; //Forma de pagamento
-        $std->vPag = $stdProd->vProd;
+        $std->vPag = number_format($stdProd->vProd, 2, '.', '');
         $std->indPag = 0;
         $nfe->tagdetPag($std);
 
@@ -246,13 +243,15 @@ class CriarNotaFiscal
 
         try {
             $st = new Standardize();
-            $std = $st->toArray($xml);
+            $std = $st->toArray($xmlAssinado);
+            $respostaSefaz = $st->toArray($resp);
 
             $nfe = new NfeModel();
             $nfe->infNFe = $std['infNFe'];
+            $nfe->infRec = $respostaSefaz['infRec'];
             $nfe->save();
 
-            return response()->json($std, 200);
+            return response()->json($resp, 200);
 
         } catch (\Exception $e) {
             exit($e->getMessage());
