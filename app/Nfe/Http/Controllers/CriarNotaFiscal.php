@@ -10,6 +10,7 @@ use NFePHP\NFe\Complements;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\NfeModel;
+use NFePHP\Common\Exception\ValidatorException;
 
 class CriarNotaFiscal
 {
@@ -40,6 +41,7 @@ class CriarNotaFiscal
         $munDest =  $request->input('xMun');
         $cepDest =  $request->input('CEP');
         $ufDest =  $request->input('UF');
+        $xCpl =  $request->input('xCpl');
 
         //produtos
         $vProd = $request->input('vProd');
@@ -110,6 +112,7 @@ class CriarNotaFiscal
         $std->xBairro = $bairroDest;
         $std->cMun = 5300108;
         $std->xMun = $munDest;
+        $std->xCpl = $xCpl;
         $std->UF = $ufDest;
         $std->CEP = $cepDest;
         $std->cPais = $cnpj->codPais;
@@ -241,7 +244,18 @@ class CriarNotaFiscal
 
         $xml = $nfe->getXML(); // O conteúdo do XML fica armazenado na variável $xml
 
+        $certPath = storage_path('app') . env('APP_CERTS_PATH', true) . '/certificado.pfx';
+        $pfx = file_get_contents($certPath);
+
+        $certificate = Certificate::readPfx($pfx, env('APP_CART_PASSWORD', true));
         try {
+
+            $tools = new Tools($dadosCnpj, $certificate);
+            $xmlAssinado = $tools->signNFe($xml);
+
+            $idLote = str_pad(100, 15, '0', STR_PAD_LEFT); // Identificador do lote
+            $resp = $tools->sefazEnviaLote([$xmlAssinado], $idLote);
+
             $st = new Standardize();
             $std = $st->toArray($xmlAssinado);
             $respostaSefaz = $st->toArray($resp);
@@ -253,7 +267,10 @@ class CriarNotaFiscal
 
             return response()->json($resp, 200);
 
-        } catch (\Exception $e) {
+        } catch(ValidatorException $e){
+            return response()->json($e->getMessage(), 400);
+        }
+        catch (\Exception $e) {
             exit($e->getMessage());
         }
     }
