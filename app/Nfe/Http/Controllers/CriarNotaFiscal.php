@@ -34,17 +34,16 @@ class CriarNotaFiscal
 
         //destinatario
         $nomeEmpresaDest  = $request->input('xNome');
+        $cepDest =  $request->input('CEP');
         $logradouroDest = $request->input('xLgr');
-        $cpfDest = $request->input('CPF');
-        $nroDest =  $request->input('nro');
+        $complemento =  $request->input('xCpl');
         $bairroDest =  $request->input('xBairro');
         $munDest =  $request->input('xMun');
-        $cepDest =  $request->input('CEP');
+        $nroDest =  $request->input('nro');
         $ufDest =  $request->input('UF');
-        $xCpl =  $request->input('xCpl');
+        $cpfDest = $request->input('CPF');
 
         //produtos
-        $vProd = $request->input('vProd');
         $nomeProduto = $request->input('xProd');
         $qtdComercial = $request->input('qCom');
         $qtdTributavel = $request->input('qTrib');
@@ -112,7 +111,7 @@ class CriarNotaFiscal
         $std->xBairro = $bairroDest;
         $std->cMun = 5300108;
         $std->xMun = $munDest;
-        $std->xCpl = $xCpl;
+        $std->xCpl = $complemento;
         $std->UF = $ufDest;
         $std->CEP = $cepDest;
         $std->cPais = $cnpj->codPais;
@@ -244,28 +243,15 @@ class CriarNotaFiscal
 
         $xml = $nfe->getXML(); // O conteúdo do XML fica armazenado na variável $xml
 
-        $certPath = storage_path('app') . env('APP_CERTS_PATH', true) . '/certificado.pfx';
-        $pfx = file_get_contents($certPath);
-
-        $certificate = Certificate::readPfx($pfx, env('APP_CART_PASSWORD', true));
         try {
-
-            $tools = new Tools($dadosCnpj, $certificate);
-            $xmlAssinado = $tools->signNFe($xml);
-
-            $idLote = str_pad(100, 15, '0', STR_PAD_LEFT); // Identificador do lote
-            $resp = $tools->sefazEnviaLote([$xmlAssinado], $idLote);
-
             $st = new Standardize();
-            $std = $st->toArray($xmlAssinado);
-            $respostaSefaz = $st->toArray($resp);
+            $std = $st->toArray($xml);
 
             $nfe = new NfeModel();
             $nfe->infNFe = $std['infNFe'];
-            $nfe->infRec = $respostaSefaz['infRec'];
             $nfe->save();
 
-            return response()->json($resp, 200);
+            return response()->json($std, 200);
 
         } catch(ValidatorException $e){
             return response()->json($e->getMessage(), 400);
