@@ -66,3 +66,7 @@ $router->get(
         'as' => 'usuario', 'uses' => '\App\Conta\Http\Controllers\Autenticacao@usuario'
     ]
 );
+
+$router->post('/criar-nfe/{ambiente}','\App\Nfe\Http\Controllers\CriarNotaFiscal@index');
+
+$router->get('/listar-xml/{id}','\App\Nfe\Http\Controllers\ListarXmlNotaFiscal@index');
