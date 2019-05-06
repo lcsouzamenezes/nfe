@@ -252,7 +252,7 @@ class CriarNotaFiscal
             $nfe->save();
 
             $diskLocal = $fs->disk('s3');
-            $diskLocal->put($nNF.'.xml', $xml);
+            $diskLocal->put($std['infNFe']['attributes']['Id'].'.xml', $xml);
 
             return response()->json($std, 200);
 
