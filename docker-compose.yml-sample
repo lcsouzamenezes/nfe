@@ -72,6 +72,19 @@ services:
     volumes:
       - .:/doc
 
+  minio:
+      container_name: nfe-minio
+      image: minio/minio:latest
+      environment:
+        MINIO_ACCESS_KEY: testeteste
+        MINIO_SECRET_KEY: teste1234
+      volumes:
+        - ./minio/data:/data
+        - ./minio/config:/root/.minio
+      ports:
+            - "9001:9000"
+      command: server /data
+
 #    networks:
 #      static-network:
 #        ipv4_address: 172.20.0.3

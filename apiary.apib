@@ -120,7 +120,8 @@ Geração da NF-E.
 
 + Request 200 (application/json)
     + Attributes
-        + cnpj: 111.111.11/0001-98 (string, required)
+        + nNF: 12 (string, required)
+        + CNPJ: 111.111.11/0001-98 (string, required)
         + IE: 0000366100100 (string, required)
 + Response 200 (application/json)
 
@@ -179,7 +180,6 @@ Retorna lista de todas as NF-Es.
 Retorna todos os dados da NF-E.
 
 * Para o retorno dos dados da NF-E será preciso do _id
-
 + Request 200 (application/json)
     + Attributes
         + id: 5caf8125d75b6a00075c1d40 (string, required)
@@ -188,9 +188,43 @@ Retorna todos os dados da NF-E.
         {
               "message": "sucesso"
         }
-
 + Response 400 (application/json)
 
         {
             "message": "não foi possivel localizar a NF-E!"
+        }
+
+## Criar NFE [/criar-nfe/{ambiente}]
+### Criação das NFE  [POST]
+
+* Para a criação das NF-E será preciso dos seguintes campos
+    + Request 200 (application/json)
+        + Attributes
+            + xNF: 1050 (string, required)
+            + xNome: Batman (string, required)
+            + CEP: 70330545 (string, required)
+            + xLgr: CLS 102 Bloco D (string, required)
+            + xCpl: Apt 645 (string, required)
+            + xBairro: Asa Sul (string, required)
+            + xMun: Brasília (string, required)
+            + nro: 30 (string, required)
+            + UF: DF (string, required)
+            + CPF: 75512793004 (string, required)
+            + natOp: Descricao da venda (string, required)
+            + xProd: Artigos para festa (string, required)
+            + qCom:  2 (number, required)
+            + qTrib: 2 (number, required)
+            + vUnCom:  150 (number, required)
+            + vUnTrib: 150 (number, required)
+            + UF: DF (string, required)
+
++ Response 200 (application/json)
+
+        {
+            "message": "sucesso"
+        }
++ Response 400 (application/json)
+
+        {
+            "message": "This XML is not valid. Element '{http://www.portalfiscal.inf.br/nfe}': This element is not expected. Expected is ( {http://www.portalfiscal.inf.br/nfe} )."
         }

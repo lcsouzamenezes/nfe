@@ -2,7 +2,6 @@
 
 namespace App\Nfe\Http\Controllers;
 
-use Illuminate\Support\Facades\Storage;
 use NFePHP\NFe\Make;
 use NFePHP\NFe\Tools;
 use NFePHP\Common\Certificate;
