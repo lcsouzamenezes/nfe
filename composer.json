@@ -9,6 +9,7 @@
         "firebase/php-jwt": "^5.0",
         "jenssegers/mongodb": "^3.5",
         "laravel/lumen-framework": "5.8.*",
+        "league/flysystem-aws-s3-v3": "~1.0",
         "nfephp-org/sped-nfe": "^5.0",
         "sentry/sentry-laravel": "^1.0",
         "vlucas/phpdotenv": "3.x"

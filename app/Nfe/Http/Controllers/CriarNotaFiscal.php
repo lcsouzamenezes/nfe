@@ -15,7 +15,7 @@ use NFePHP\Common\Exception\ValidatorException;
 class CriarNotaFiscal
 {
 
-    public function index(Request $request, $ambiente)
+    public function index(Request $request, $ambiente, \Illuminate\Contracts\Filesystem\Factory $fs)
     {
         $nfe = new Make();
         $std = new \stdClass();
@@ -233,7 +233,6 @@ class CriarNotaFiscal
         $std->vTroco = 0;
         $nfe->tagpag($std);
 
-
         $std = new \stdClass();
         $std->indPag = 0;
         $std->tPag = "01"; //Forma de pagamento
@@ -250,6 +249,9 @@ class CriarNotaFiscal
             $nfe = new NfeModel();
             $nfe->infNFe = $std['infNFe'];
             $nfe->save();
+
+            $diskLocal = $fs->disk('s3');
+            $diskLocal->put($std['infNFe']['attributes']['Id'].'.xml', $xml);
 
             return response()->json($std, 200);
 

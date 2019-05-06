@@ -68,3 +68,5 @@ $router->get(
 );
 
 $router->post('/criar-nfe/{ambiente}','\App\Nfe\Http\Controllers\CriarNotaFiscal@index');
+
+$router->get('/listar-xml/{id}','\App\Nfe\Http\Controllers\ListarXmlNotaFiscal@index');
