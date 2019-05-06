@@ -17,7 +17,7 @@ class JwtMiddleware
             $token = $request->header('token');
         }
 
-        if(!$token) {
+        if (!$token) {
             // Unauthorized response if token not there
             return response()->json([
                 'error' => 'Token not provided.'
@@ -26,11 +26,11 @@ class JwtMiddleware
 
         try {
             $credentials = JWT::decode($token, ('7Fsxc2A865V6'), ['HS256']);
-        } catch(ExpiredException $e) {
+        } catch (ExpiredException $e) {
             return response()->json([
                 'error' => 'Provided token is expired.'
             ], 400);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             dd($e);
             return response()->json([
                 'error' => 'An error while decoding token.'

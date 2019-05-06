@@ -17,10 +17,11 @@ use Carbon\Carbon;
 
 class Distribuicao
 {
-    public function get(Request $request, $ambiente,
+    public function get(
+        Request $request,
+        $ambiente,
         \Illuminate\Contracts\Filesystem\Factory $fs
-    )
-    {
+    ) {
         $ultimaConsulta = ConsultaDistribuicao::orderBy('dhResp', 'desc')->first();
 
         /* dd($ultimaConsulta->getDhResp()); */
@@ -90,9 +91,8 @@ class Distribuicao
             }
             //essas tags irão conter os documentos zipados
             $docs = $lote->getElementsByTagName('docZip');
+
             foreach ($docs as $doc) {
-
-
                 $numnsu = $doc->getAttribute('NSU');
                 $schema = $doc->getAttribute('schema');
                 //descompacta o documento e recupera o XML original

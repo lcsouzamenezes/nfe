@@ -12,8 +12,8 @@ class ConsultaDistribuicao extends Eloquent
     protected $collection = 'consultaDistribuicao';
     protected $dates = ['dhResp'];
 
-    public function getDhResp() {
-
+    public function getDhResp()
+    {
         $date = Carbon::create($this->dhResp->toDateTimeString());
         $date->setTimezone('America/Sao_Paulo');
 
