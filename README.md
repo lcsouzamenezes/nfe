@@ -23,6 +23,7 @@ Para parar o container basta digitar:
 * [Composer](https://getcomposer.org/)
 * [Sentry](https://sentry.io/welcome/)
 * [NfePHP](https://github.com/nfephp-org/)
+* [Minio](https://github.com/minio/minio/)
 
 
 Link uteis:
