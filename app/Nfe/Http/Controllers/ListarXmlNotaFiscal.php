@@ -38,7 +38,7 @@ class ListarXmlNotaFiscal
 
         header("Content-Type: {$result['ContentType']}");
         header('Content-Disposition: attachment; filename="'.$keyXml.'" ');
-        echo $result['Body'];
 
+        echo $result['Body'];
     }
 }
