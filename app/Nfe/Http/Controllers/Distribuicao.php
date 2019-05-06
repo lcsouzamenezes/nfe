@@ -17,7 +17,9 @@ use Carbon\Carbon;
 
 class Distribuicao
 {
-    public function get(Request $request, $ambiente)
+    public function get(Request $request, $ambiente,
+        \Illuminate\Contracts\Filesystem\Factory $fs
+    )
     {
         $ultimaConsulta = ConsultaDistribuicao::orderBy('dhResp', 'desc')->first();
 
@@ -101,11 +103,15 @@ class Distribuicao
                 $nfe = new NfeModel();
                 $stdCl = new Standardize($content);
                 $data = $stdCl->toArray();
+                /* dd($data); */
 
                 $nfe->infNFe = $data;
                 $nfe->save();
                 //processar o conteudo do NSU, da forma que melhor lhe interessar
                 //esse processamento depende do seu aplicativo
+                //
+                $diskLocal = $fs->disk('s3');
+                $diskLocal->put($data['NFe']['infNFe']['attributes']['Id'].'.xml', $content);
             }
             sleep(2);
         }
