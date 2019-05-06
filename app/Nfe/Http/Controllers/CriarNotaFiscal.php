@@ -33,14 +33,14 @@ class CriarNotaFiscal
         $naturezaOp = $request->input('natOp');
 
         //destinatario
-        $nomeEmpresaDest  = $request->input('xNome');
-        $cepDest =  $request->input('CEP');
+        $nomeEmpresaDest = $request->input('xNome');
+        $cepDest = $request->input('CEP');
         $logradouroDest = $request->input('xLgr');
-        $complemento =  $request->input('xCpl');
-        $bairroDest =  $request->input('xBairro');
-        $munDest =  $request->input('xMun');
-        $nroDest =  $request->input('nro');
-        $ufDest =  $request->input('UF');
+        $complemento = $request->input('xCpl');
+        $bairroDest = $request->input('xBairro');
+        $munDest = $request->input('xMun');
+        $nroDest = $request->input('nro');
+        $ufDest = $request->input('UF');
         $cpfDest = $request->input('CPF');
 
         //produtos
@@ -58,7 +58,7 @@ class CriarNotaFiscal
         $std = new \stdClass();
         $std->cUF = 53; //coloque um código real e válido
         $std->cNF = rand(11111111, 99999999);
-        $std->natOp = $natOp; //Informar a natureza daoperação de que decorrer a saída ou a entrada, tais como venda, compra, transferência,
+        $std->natOp = $natOp;
         $std->mod = 55;
         $std->serie = 1;
         $std->nNF = $nNF;
@@ -79,7 +79,7 @@ class CriarNotaFiscal
         $nfe->tagide($std);
 
         $std = new \stdClass();
-        $std->xNome =  $cnpj->razaosocial;
+        $std->xNome = $cnpj->razaosocial;
         $std->IE = $cnpj->IE;
         $std->CRT = 3;
         $std->CNPJ = $cnpj->cnpj;
@@ -137,7 +137,7 @@ class CriarNotaFiscal
         $stdProd->uTrib = 'PÇ';
         $stdProd->vUnCom = $valorUnitarioComercial;
         $stdProd->vUnTrib = $valorUnitarioTributario;
-        $stdProd->vProd = number_format(($stdProd->qTrib * $stdProd->vUnTrib), 2,  '.', '');
+        $stdProd->vProd = number_format(($stdProd->qTrib * $stdProd->vUnTrib), 2, '.', '');
         $stdProd->indTot = 1;
 //        $stdProd->vFrete = number_format("12.88", 2, '.', '');
         $nfe->tagprod($stdProd);
@@ -154,7 +154,7 @@ class CriarNotaFiscal
         $stdICMS->modBC = 0;
         $stdICMS->vBC = number_format($stdProd->vProd, 2, '.', '');
         $stdICMS->pICMS = '12';
-        $stdICMS->vICMS = number_format($stdICMS->vBC *  ($stdICMS->pICMS / 100),2);
+        $stdICMS->vICMS = number_format($stdICMS->vBC * ($stdICMS->pICMS / 100), 2);
         $nfe->tagICMS($stdICMS);
 
         $std = new \stdClass();
@@ -199,7 +199,15 @@ class CriarNotaFiscal
         $stdIMCStot->vPIS = 0.00;
         $stdIMCStot->vCOFINS = 0.00;
         $stdIMCStot->vOutro = 0.00;
-        $stdIMCStot->vNF = ($stdIMCStot->vProd - $stdIMCStot->vDesc - $stdIMCStot->vICMSDeson + $stdIMCStot->vST + $stdIMCStot->vFrete + $stdIMCStot->vSeg + $stdIMCStot->vOutro + $stdIMCStot->vII + $stdIMCStot->vIPI);
+        $stdIMCStot->vNF = ($stdIMCStot->vProd - $stdIMCStot->vDesc -
+            $stdIMCStot->vICMSDeson +
+            $stdIMCStot->vST +
+            $stdIMCStot->vFrete +
+            $stdIMCStot->vSeg +
+            $stdIMCStot->vOutro +
+            $stdIMCStot->vII +
+            $stdIMCStot->vIPI
+        );
         $stdIMCStot->vTotTrib = 0.00;
         $nfe->tagICMSTot($stdIMCStot);
 
@@ -251,14 +259,12 @@ class CriarNotaFiscal
             $nfe->save();
 
             $diskLocal = $fs->disk('s3');
-            $diskLocal->put($std['infNFe']['attributes']['Id'].'.xml', $xml);
+            $diskLocal->put($std['infNFe']['attributes']['Id'] . '.xml', $xml);
 
             return response()->json($std, 200);
-
-        } catch(ValidatorException $e){
+        } catch (ValidatorException $e) {
             return response()->json($e->getMessage(), 400);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             exit($e->getMessage());
         }
     }
