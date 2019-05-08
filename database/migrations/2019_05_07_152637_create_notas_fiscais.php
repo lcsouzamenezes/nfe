@@ -6,26 +6,23 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateNotasFiscais extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+    protected $connection = 'mongodb';
+
     public function up()
     {
-        Schema::create('notas_fiscais', function($collection)
-        {
-            $collection->index('id');
-        });
+        if(Schema::connection($this->connection)->hasTable('notas_fiscais') == false) {
+            Schema::create('notas_fiscais', function ($collection) {
+                $collection->index('id');
+            });
+        }
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
-        Schema::dropIfExists('notas_fiscais');
+        Schema::connection($this->connection)
+            ->table('notas_fiscais', function (Blueprint $collection)
+            {
+                $collection->drop();
+            });
     }
 }
