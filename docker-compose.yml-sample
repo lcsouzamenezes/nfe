@@ -22,6 +22,9 @@ services:
     volumes:
       - .:/app
       - ./docker/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
+    depends_on:
+      - "minio"
+      - "mongo"
 
   mongo:
     container_name: nfe-mongo
@@ -31,7 +34,6 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-      MONGO_DATA_DIR: /data
     volumes:
       - ./data:/data
 
