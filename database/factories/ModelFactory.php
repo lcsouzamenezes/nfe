@@ -17,3 +17,16 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'email' => $faker->email,
     ];
 });
+
+$fakerBr = Faker\factory::create('pt_BR');
+$factory->define(App\NotasFiscaisModel::class, function (Faker\Generator $faker) use ($fakerBr) {
+    return [
+        'nome' => $fakerBr->firstName.' '. $fakerBr->lastName,
+        'telefone' => $fakerBr->phonenumber,
+        'email' => $fakerBr->safeEmail,
+        'uf' => $fakerBr->stateAbbr,
+        'estado' => $fakerBr->state,
+        'cidade' => $fakerBr->city,
+        'endereco'=> $fakerBr->streetAddress,
+    ];
+});
