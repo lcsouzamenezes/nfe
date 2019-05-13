@@ -53,10 +53,7 @@ services:
   ## Documentação da API altamente recomendado para desenvolvedores
   api-doc:
     container_name: nfe-api-doc
-    image: quay.io/bukalapak/snowboard:latest
-    # build:
-    #   context: .
-    #   dockerfile: docker/mongo/Dockerfile
+    image: quay.io/bukalapak/snowboard:v1.7.0
     entrypoint:
       - snowboard
       - --watch
