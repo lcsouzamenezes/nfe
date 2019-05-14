@@ -22,6 +22,9 @@ services:
     volumes:
       - .:/app
       - ./docker/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
+    depends_on:
+      - "minio"
+      - "mongo"
 
   mongo:
     container_name: nfe-mongo
@@ -31,9 +34,9 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-      MONGO_DATA_DIR: /data
     volumes:
-      - ./data:/data
+      - ./data/db:/data/db
+      - ./data/configdb:/data/configdb
 
   minio:
     container_name: nfe-minio
@@ -51,10 +54,7 @@ services:
   ## Documentação da API altamente recomendado para desenvolvedores
   api-doc:
     container_name: nfe-api-doc
-    image: quay.io/bukalapak/snowboard:latest
-    # build:
-    #   context: .
-    #   dockerfile: docker/mongo/Dockerfile
+    image: quay.io/bukalapak/snowboard:v1.7.0
     entrypoint:
       - snowboard
       - --watch

@@ -105,8 +105,10 @@ class Distribuicao
                 $data = $stdCl->toArray();
                 /* dd($data); */
 
-                $nfe->infNFe = $data;
+                $nfe->data = $data;
+                $nfe->chNFe = $data['protNFe']['infProt']['chNFe'];
                 $nfe->save();
+
                 //processar o conteudo do NSU, da forma que melhor lhe interessar
                 //esse processamento depende do seu aplicativo
                 //
