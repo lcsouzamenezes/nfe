@@ -35,7 +35,8 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
     volumes:
-      - ./data:/data
+      - ./data/db:/data/db
+      - ./data/configdb:/data/configdb
 
   minio:
     container_name: nfe-minio
