@@ -1,6 +1,7 @@
 <?php
 
 return [
+   'migrations' => 'migrations',
    'default' => env('DB_CONNECTION', 'mongodb'),
    'connections' => [
        'mongodb' => [
