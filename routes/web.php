@@ -31,7 +31,7 @@ $router->get(
 );
 
 $router->get(
-    '/distribuicao/{ambiente}',
+    '/distribuicao/{ambiente}/{certId}',
     [
         'as' => 'distribuicao', 'uses' => '\App\Nfe\Http\Controllers\Distribuicao@get'
     ]

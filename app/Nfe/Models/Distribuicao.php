@@ -1,15 +1,15 @@
 <?php
 
-namespace App;
+namespace App\Nfe\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Carbon\Carbon;
 
-class ConsultaDistribuicao extends Eloquent
+class Distribuicao extends Eloquent
 {
     protected $connection = 'mongodb';
-    protected $collection = 'consultaDistribuicao';
+    protected $collection = 'distribuicao';
     protected $dates = ['dhResp'];
 
     public function getDhResp()
