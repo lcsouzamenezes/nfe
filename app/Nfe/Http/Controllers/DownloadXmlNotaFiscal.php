@@ -13,7 +13,7 @@ use Illuminate\Http\Response;
 use App\NfeModel;
 use NFePHP\Common\Exception\ValidatorException;
 
-class ListarXmlNotaFiscal
+class DownloadXmlNotaFiscal
 {
     public function index(Request $request, $id)
     {
