@@ -13,9 +13,10 @@ use App\NfeModel;
 
 class ListarNotas
 {
-    public function listarNotas()
+    public function listarNotas(Request $request, $usuario)
     {
         $notas = NfeModel::all();
+        $notas = NfeModel::where('data.NFe.infNFe.dest.CPF', '=', $usuario)->get();
         return $notas;
     }
 }

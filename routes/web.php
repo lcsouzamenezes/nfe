@@ -45,7 +45,7 @@ $router->get(
 );
 
 $router->get(
-    '/listar-notas',
+    '/listar-notas/{usuario}',
     [
         'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\ListarNotas@listarNotas'
     ]
