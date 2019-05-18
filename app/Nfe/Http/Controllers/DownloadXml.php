@@ -16,33 +16,6 @@ use NFePHP\Common\Exception\ValidatorException;
 
 class DownloadXml
 {
-//    public function index(Request $request, $id)
-//    {
-//        $xmlId = NFeModel::where('infNFe.attributes.Id', $id)->get()->toArray();
-//        $keyXml = $xmlId[0]['infNFe']['attributes']['Id'].'.xml';
-//
-//        $s3 = new \Aws\S3\S3Client([
-//            'version' => 'latest',
-//            'region'  => env("S3_REGION"),
-//            'endpoint' => env('MINIO_ENDPOINT', 'http://minio:9000'),
-//            'use_path_style_endpoint' => true,
-//            'credentials' => [
-//                'key'    => env('S3_KEY'),
-//                'secret' => env('S3_SECRET'),
-//            ],
-//        ]);
-//
-//        $result = $s3->getObject([
-//            'Bucket' => env('S3_BUCKET'),
-//            'Key'    => $keyXml,
-//        ]);
-//
-//        header("Content-Type: {$result['ContentType']}");
-//        header('Content-Disposition: attachment; filename="'.$keyXml.'" ');
-//
-//        echo $result['Body'];
-//    }
-
     public function get(Request $request, $chNFe)
     {
         $service = new DownloadXmlService();
