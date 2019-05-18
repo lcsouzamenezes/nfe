@@ -2,6 +2,8 @@
 
 namespace App\Nfe\Http\Controllers;
 
+use App\Nfe\Services\NFe as NFeService;
+use app\Nfe\Services\NFe;
 use NFePHP\NFe\Make;
 use NFePHP\NFe\Tools;
 use NFePHP\Common\Certificate;
@@ -9,16 +11,22 @@ use NFePHP\NFe\Common\Standardize;
 use NFePHP\NFe\Complements;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\NfeModel;
+use App\Nfe\Models\NFe as NFeModel;
 use NFePHP\Common\Exception\ValidatorException;
 
 class CriarNotaFiscal
 {
 
-    public function index(Request $request, $ambiente, \Illuminate\Contracts\Filesystem\Factory $fs)
-    {
+    public function index(
+        Request $request,
+        $ambiente,
+        $certId
+    ){
         $nfe = new Make();
         $std = new \stdClass();
+
+        $service = new NFeService();
+        $tools = $service->config($certId);
 
         $data = new \DateTime();
         $timeZone = $data->format(\DateTime::ATOM);
@@ -250,22 +258,44 @@ class CriarNotaFiscal
 
         $xml = $nfe->getXML(); // O conteúdo do XML fica armazenado na variável $xml
 
-        try {
-            $st = new Standardize();
-            $std = $st->toArray($xml);
+        $service->assinarNFe($xml);
 
-            $nfe = new NfeModel();
-            $nfe->infNFe = $std['infNFe'];
-            $nfe->save();
-
-            $diskLocal = $fs->disk('s3');
-            $diskLocal->put($std['infNFe']['attributes']['Id'] . '.xml', $xml);
-
-            return response()->json($std, 200);
-        } catch (ValidatorException $e) {
-            return response()->json($e->getMessage(), 400);
-        } catch (\Exception $e) {
-            exit($e->getMessage());
-        }
-    }
+//        $certPath = storage_path('app') . env('APP_CERTS_PATH', true) . '/certificado.pfx';
+//        $pfx = file_get_contents($certPath);
+//
+//        $certificate = Certificate::readPfx($pfx, env('APP_CART_PASSWORD', true));
+//        try {
+//
+//            $tools = new Tools($dadosCnpj, $certificate);
+//            $xmlAssinado = $tools->signNFe($xml);
+//
+//            $idLote = str_pad(100, 15, '0', STR_PAD_LEFT); // Identificador do lote
+//            $resp = $tools->sefazEnviaLote([$xmlAssinado], $idLote);
+//
+//            $st = new Standardize();
+//            $resp = $st->toArray($resp);
+//
+//            $retorno = $tools->sefazConsultaRecibo($resp['infRec']['nRec'], $ambiente);
+//            $protocoledXML = Complements::toAuthorize($xmlAssinado, $retorno);
+//
+//            $st = new Standardize();
+//            $data = $st->toArray($protocoledXML);
+//
+//            $nfe = new NFeModel();
+//            $nfe->data = $data;
+//            $nfe->chNFe = $data['protNFe']['infProt']['chNFe'];
+//            $nfe->tpAmb = $data['protNFe']['infProt']['tpAmb'];
+//            $nfe->save();
+//
+//            $diskLocal = $fs->disk('s3');
+//            $diskLocal->put($data['protNFe']['infProt']['chNFe'].'.xml', $protocoledXML);
+//
+//            return response()->json($resp, 200);
+//        } catch (ValidatorException $e) {
+//            return response()->json($e->getMessage(), 400);
+//        } catch (\Exception $e) {
+//            return response()->json($e->getMessage(), 400);
+//        }
+//    }
+}
 }
