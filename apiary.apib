@@ -183,20 +183,38 @@ Retorna todos os dados da NF-E.
 + Request 200 (application/json)
     + Attributes
         + id: 5caf8125d75b6a00075c1d40 (string, required)
+
 + Response 200 (application/json)
 
         {
-              "message": "sucesso"
+            "message": "sucesso"
         }
+
 + Response 400 (application/json)
 
         {
             "message": "não foi possivel localizar a NF-E!"
         }
 
+## Download xml NFE [/download-xml/{id}]
+### Lista/Download do XML [GET]
+* Para o download do arquivo xml da NF-E será preciso do número Id que esta em: infNFe.attributes.Id
++ Request 200 (application/json)
+    + Attributes
+        + Id: NFe53190532944459000130550010000009021292641210 (string, required)
++ Response 200 (application/json)
+
+        {
+              "message": "Download com sucesso"
+        }
++ Response 400 (application/json)
+
+        {
+              "message": "não foi possivel localizar a NF-E!"
+        }
+
 ## Criar NFE [/criar-nfe/{ambiente}]
 ### Criação das NFE  [POST]
-
 * Para a criação das NF-E será preciso dos seguintes campos
     + Request 200 (application/json)
         + Attributes
@@ -223,8 +241,10 @@ Retorna todos os dados da NF-E.
         {
             "message": "sucesso"
         }
+
 + Response 400 (application/json)
 
         {
             "message": "This XML is not valid. Element '{http://www.portalfiscal.inf.br/nfe}': This element is not expected. Expected is ( {http://www.portalfiscal.inf.br/nfe} )."
         }
+
