@@ -69,4 +69,4 @@ $router->get(
 
 $router->post('/nfe/criar/{ambiente}/{certId}','\App\Nfe\Http\Controllers\CriarNFe@index');
 
-$router->get('/download-local/{chNfe}','\App\Nfe\Http\Controllers\ListarXmlNotaFiscal@get');
+$router->get('/nfe/download-local/{chNfe}','\App\Nfe\Http\Controllers\DownloadXml@get');
