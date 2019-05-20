@@ -3,6 +3,7 @@ namespace App\Nfe\Http\Controllers;
 
 use App\Nfe\Http\Controllers\Controller;
 use App\Nfe\Services\Distribuicao as DistribuicaoService;
+use \App\Nfe\Models\Distribuicao as DistribuicaoModel;
 
 use NFePHP\NFe\Make;
 use NFePHP\NFe\Tools as Tools;
@@ -13,8 +14,6 @@ use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 
 use \App\Nfe\Exceptions\NfeException;
-use \App\Nfe\Models\Distribuicao as DistribuicaoModel;
-use \App\NfeModel;
 
 use Carbon\Carbon;
 
@@ -78,6 +77,8 @@ class Distribuicao extends Controller
             sleep(2);
         }
 
-        return response()->json('finalizado', 201);
+        $data = ['data' => ['message' => 'Criado com Sucesso!']];
+
+        return response()->json($data, 201);
     }
 }

@@ -9,14 +9,14 @@ use NFePHP\NFe\Common\Standardize;
 use NFePHP\NFe\Complements;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\NfeModel;
+use App\Nfe\Models\NFe as NFeModel;
 
 class ListarNotas
 {
     public function listarNotas($usuario)
     {
-        $notas = NfeModel::all();
-        $notas = NfeModel::where('data.NFe.infNFe.dest.CPF', '=', $usuario)->get();
+        /* $notas = NFeModel::all(); */
+        $notas = NFeModel::where('data.NFe.infNFe.dest.CPF', '=', $usuario)->get();
         return $notas;
     }
 }
