@@ -13,11 +13,9 @@ class ListarNFe
         $service = new ListarNFeService();
         $notas = $service->listarNFe($usuario);
 
-        if (empty($notas))
-        {
+        if (empty($notas)) {
             return response()->json('Dados não encontrados', 400);
         }
             return response()->json($notas, 200);
-
     }
 }

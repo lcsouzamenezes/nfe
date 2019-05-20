@@ -107,7 +107,7 @@ class CriarNFe
         $stdDestinatario->indIEDest = 2; //2=Contribuinte isento de Inscrição no cadastro de Contribuintes do ICMS;
         $stdDestinatario->IE = '';
 
-        if (strlen($this->limparCpfCnpj($cpfCnpjDest)) == 11 ) {
+        if (strlen($this->limparCpfCnpj($cpfCnpjDest)) == 11) {
             $stdDestinatario->CPF = $this->limparCpfCnpj($cpfCnpjDest);
         } else {
             $stdDestinatario->CNPJ = $this->limparCpfCnpj($cpfCnpjDest);
