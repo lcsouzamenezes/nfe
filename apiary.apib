@@ -164,14 +164,26 @@ Retorna lista de todas as NF-Es.
 
 + Response 200 (application/json)
 
-        {
-            "codigo": "12340623004804000164550000000002251000002258"
-        }
+            {
+                "data": {
+                        "attributes": {
+                            "versao": "4.00"
+                        },
+                    },
+                    "NFe": {
+                        "infNFe": {
+                            "attributes": {
+                                "Id": "NFe53190532944459000130550010000006331139967538",
+                              "versao": "4.00"
+                            },
+                         },
+                   }
+           }
 
 + Response 400 (application/json)
 
         {
-            "message": "não foi possivel localizar a NF-E!"
+            "message": "Dados não encontrados"
         }
 
 ## Busca Dados da NFE [/buscar-notas/{id}]
@@ -227,7 +239,7 @@ Retorna todos os dados da NF-E.
             + xMun: Brasília (string, required)
             + nro: 30 (string, required)
             + UF: DF (string, required)
-            + CPF: 75512793004 (string, required)
+            + cpfCnpj: 487.851.370-57 / 73.768.627/0001-60 (string, required)
             + natOp: Descricao da venda (string, required)
             + xProd: Artigos para festa (string, required)
             + qCom:  2 (number, required)
@@ -235,11 +247,10 @@ Retorna todos os dados da NF-E.
             + vUnCom:  150 (number, required)
             + vUnTrib: 150 (number, required)
             + UF: DF (string, required)
-
 + Response 200 (application/json)
 
         {
-            "message": "criado"
+            "message": "criado com sucesso"
         }
 
 + Response 400 (application/json)
@@ -248,27 +259,21 @@ Retorna todos os dados da NF-E.
             "message": "This XML is not valid. Element '{http://www.portalfiscal.inf.br/nfe}': This element is not expected. Expected is ( {http://www.portalfiscal.inf.br/nfe} )."
         }
 
-
 ## NF-e Distribuição [/nfe/distribuicao/{ambiente}/{certId}]
-
 Distribuição das NF-e em lote
-
-
 ### Distribuição das NF-e [GET]
-
 + Parameters
     + ambiente (string)
     + certId (string)
-
 + Request
     + Parameters
         + ambiente (string, required)
         + certId (string, required)
-
-
 + Response 200 (application/json)
 
-    {"data":{"message":"Criado com Sucesso!"}}
+        { "data":
+            {"message":"Criado com Sucesso!"}
+        }
 
 + Response 400 (application/json)
 
