@@ -4,7 +4,7 @@ namespace app\Nfe\Services;
 
 use App\Nfe\Models\Cert;
 use \App\Nfe\Models\Distribuicao as DistribuicaoModel;
-use \App\NfeModel;
+use \App\Nfe\Models\NFe as NFeModel;
 
 use Illuminate\Support\Facades\Storage;
 
@@ -65,7 +65,7 @@ class Distribuicao
             //identifica o tipo de documento
             $tipo = substr($schema, 0, 6);
 
-            $nfe = new NfeModel();
+            $nfe = new NFeModel();
             $stdCl = new Standardize($content);
             $data = $stdCl->toArray();
 

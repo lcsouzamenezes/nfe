@@ -9,9 +9,9 @@ use NFePHP\NFe\Common\Standardize;
 use NFePHP\NFe\Complements;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\NfeModel;
+use App\Nfe\Models\NFe as NfeModel;
 
-class BuscarDandosNFE
+class BuscarDadosNFE
 {
     public function buscarDadosNfe($id)
     {
