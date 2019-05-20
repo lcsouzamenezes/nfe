@@ -247,3 +247,33 @@ Retorna todos os dados da NF-E.
         {
             "message": "This XML is not valid. Element '{http://www.portalfiscal.inf.br/nfe}': This element is not expected. Expected is ( {http://www.portalfiscal.inf.br/nfe} )."
         }
+        
+
+## NF-e Distribuição [/nfe/distribuicao/{ambiente}/{certId}]
+
+Distribuição das NF-e em lote
+
+
+### Distribuição das NF-e [GET]
+
++ Parameters
+    + ambiente (string)
+    + certId (string)
+
++ Request
+    + Parameters
+        + ambiente (string, required)
+        + certId (string, required)
+
+
++ Response 200 (application/json)
+
+        {
+            "codigo": "12340623004804000164550000000002251000002258"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "erro": "nota fiscal eletronica não encontrada!"
+        }
