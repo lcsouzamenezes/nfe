@@ -1,11 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Nfe\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
-class NfeModel extends Eloquent
+class NFe extends Eloquent
 {
     protected $connection = 'mongodb';
     protected $collection = 'nfe';

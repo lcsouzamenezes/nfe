@@ -2,23 +2,27 @@
 
 namespace App\Nfe\Http\Controllers;
 
+use App\Nfe\Services\NFe as NFeService;
 use NFePHP\NFe\Make;
-use NFePHP\NFe\Tools;
-use NFePHP\Common\Certificate;
 use NFePHP\NFe\Common\Standardize;
-use NFePHP\NFe\Complements;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\NfeModel;
+use App\Nfe\Models\NFe as NFeModel;
 use NFePHP\Common\Exception\ValidatorException;
 
-class CriarNotaFiscal
+class CriarNFe
 {
 
-    public function index(Request $request, $ambiente, \Illuminate\Contracts\Filesystem\Factory $fs)
-    {
+    public function index(
+        Request $request,
+        $ambiente,
+        $certId
+    ) {
         $nfe = new Make();
         $std = new \stdClass();
+
+        $service = new NFeService();
+        $tools = $service->config($certId);
 
         $data = new \DateTime();
         $timeZone = $data->format(\DateTime::ATOM);
@@ -251,21 +255,14 @@ class CriarNotaFiscal
         $xml = $nfe->getXML(); // O conteúdo do XML fica armazenado na variável $xml
 
         try {
-            $st = new Standardize();
-            $std = $st->toArray($xml);
+            $xmlAssinado = $service->assinarNFe($xml);
+            $service->salvarNFe($xmlAssinado, $ambiente);
 
-            $nfe = new NfeModel();
-            $nfe->infNFe = $std['infNFe'];
-            $nfe->save();
-
-            $diskLocal = $fs->disk('s3');
-            $diskLocal->put($std['infNFe']['attributes']['Id'] . '.xml', $xml);
-
-            return response()->json($std, 200);
+            return response()->json('Criado', 200);
         } catch (ValidatorException $e) {
             return response()->json($e->getMessage(), 400);
         } catch (\Exception $e) {
-            exit($e->getMessage());
+            return response()->json($e->getMessage(), 400);
         }
     }
 }

@@ -31,7 +31,7 @@ $router->get(
 );
 
 $router->get(
-    '/distribuicao/{ambiente}/{certId}',
+    '/nfe/distribuicao/{ambiente}/{certId}',
     [
         'as' => 'distribuicao', 'uses' => '\App\Nfe\Http\Controllers\Distribuicao@get'
     ]
@@ -45,7 +45,7 @@ $router->get(
 );
 
 $router->get(
-    '/listar-notas',
+    '/listar-notas/{usuario}',
     [
         'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\ListarNotas@listarNotas'
     ]
@@ -67,6 +67,6 @@ $router->get(
     ]
 );
 
-$router->post('/criar-nfe/{ambiente}','\App\Nfe\Http\Controllers\CriarNotaFiscal@index');
+$router->post('/nfe/criar/{ambiente}/{certId}','\App\Nfe\Http\Controllers\CriarNFe@index');
 
-$router->get('/download-local/{chNfe}','\App\Nfe\Http\Controllers\ListarXmlNotaFiscal@get');
+$router->get('/nfe/download-local/{chNfe}','\App\Nfe\Http\Controllers\DownloadXml@get');

@@ -14,6 +14,9 @@ services:
       - "8081:8081"
     depends_on:
       - "nfe-php-fpm"
+    # networks:
+    #   static-network:
+    #     ipv4_address: 172.19.1.2
 
   nfe-php-fpm:
     build: docker/php-fpm
@@ -25,6 +28,9 @@ services:
     depends_on:
       - "minio"
       - "mongo"
+    # networks:
+    #   static-network:
+    #     ipv4_address: 172.19.1.3
 
   mongo:
     container_name: nfe-mongo
@@ -37,6 +43,9 @@ services:
     volumes:
       - ./data/db:/data/db
       - ./data/configdb:/data/configdb
+    # networks:
+    #   static-network:
+    #     ipv4_address: 172.19.1.4
 
   minio:
     container_name: nfe-minio
@@ -50,6 +59,9 @@ services:
     ports:
       - "9001:9000"
     command: server /data
+    # networks:
+    #   static-network:
+    #     ipv4_address: 172.19.1.5
 
   ## Documentação da API altamente recomendado para desenvolvedores
   api-doc:
@@ -71,26 +83,19 @@ services:
       - "8088:8088"
     volumes:
       - .:/doc
+    # networks:
+    #   static-network:
+    #     ipv4_address: 172.19.1.5
 
-  minio:
-      container_name: nfe-minio
-      image: minio/minio:latest
-      environment:
-        MINIO_ACCESS_KEY: testeteste
-        MINIO_SECRET_KEY: teste1234
-      volumes:
-        - ./minio/data:/data
-        - ./minio/config:/root/.minio
-      ports:
-            - "9001:9000"
-      command: server /data
-
-#    networks:
-#      static-network:
-#        ipv4_address: 172.20.0.3
 # networks:
 #   static-network:
 #    ipam:
 #      config:
 #        - subnet: 172.20.0.0/16
 #          iprange: 172.28.5.0/24
+# use own RISK!
+# networks:
+#   static-network:
+#     ipam:
+#       config:
+#         - subnet: 172.19.0.0/16
