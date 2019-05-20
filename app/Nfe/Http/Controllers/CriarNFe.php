@@ -45,7 +45,7 @@ class CriarNFe
         $munDest = $request->input('xMun');
         $nroDest = $request->input('nro');
         $ufDest = $request->input('UF');
-        $cpfDest = $request->input('CPF');
+        $cpfCnpjDest = $request->input('cpfCnpj');
 
         //produtos
         $nomeProduto = $request->input('xProd');
@@ -106,7 +106,12 @@ class CriarNFe
         $stdDestinatario->xNome = $nomeEmpresaDest;
         $stdDestinatario->indIEDest = 2; //2=Contribuinte isento de Inscrição no cadastro de Contribuintes do ICMS;
         $stdDestinatario->IE = '';
-        $stdDestinatario->CPF = $cpfDest;
+
+        if (strlen($this->limparCpfCnpj($cpfCnpjDest)) == 11 ) {
+            $stdDestinatario->CPF = $this->limparCpfCnpj($cpfCnpjDest);
+        } else {
+            $stdDestinatario->CNPJ = $this->limparCpfCnpj($cpfCnpjDest);
+        }
         $nfe->tagdest($stdDestinatario);
 
         $std = new \stdClass();
@@ -258,11 +263,22 @@ class CriarNFe
             $xmlAssinado = $service->assinarNFe($xml);
             $service->salvarNFe($xmlAssinado, $ambiente);
 
-            return response()->json('Criado', 200);
+            return response()->json('Criado com sucesso', 200);
         } catch (ValidatorException $e) {
             return response()->json($e->getMessage(), 400);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), 400);
         }
+    }
+
+    public function limparCpfCnpj($valor)
+    {
+        $valor = trim($valor);
+        $valor = str_replace(".", "", $valor);
+        $valor = str_replace(",", "", $valor);
+        $valor = str_replace("-", "", $valor);
+        $valor = str_replace("/", "", $valor);
+
+        return $valor;
     }
 }
