@@ -38,14 +38,14 @@ $router->get(
 );
 
 $router->get(
-    '/buscar-notas/{id}',
+    '/nfe/buscar-notas/{id}',
     [
         'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\BuscarDadosNFe@buscarNFe'
     ]
 );
 
 $router->get(
-    '/listar-notas/{usuario}',
+    '/nfe/listar-notas/{usuario}',
     [
         'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\ListarNFe@listarNotas'
     ]
