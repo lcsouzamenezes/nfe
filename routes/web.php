@@ -40,14 +40,14 @@ $router->get(
 $router->get(
     '/nfe/buscar-notas/{id}',
     [
-        'as' => 'buscar-nota', 'uses' => '\App\Nfe\Http\Controllers\BuscarDadosNFE@buscarDadosNfe'
+        'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\BuscarDadosNFe@buscarNFe'
     ]
 );
 
 $router->get(
     '/nfe/listar-notas/{usuario}',
     [
-        'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\ListarNotas@listarNotas'
+        'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\ListarNFe@listarNotas'
     ]
 );
 
