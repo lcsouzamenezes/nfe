@@ -40,7 +40,7 @@ $router->get(
 $router->get(
     '/buscar-notas/{id}',
     [
-        'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\BuscarDandosNFE@buscarDadosNfe'
+        'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\BuscarDadosNFe@buscarNFe'
     ]
 );
 
