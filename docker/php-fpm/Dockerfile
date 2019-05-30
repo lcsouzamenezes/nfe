@@ -12,16 +12,6 @@ RUN composer install \
     --no-scripts \
     --prefer-dist
 
-FROM nginx:mainline-alpine
-
-# COPY docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
-
-COPY docker/nginx/ /etc/nginx/conf.d/
-
-# RUN ls -la /etc/nginx/conf.d/
-
-COPY . /var/www/html
-
 FROM php:7.2.5-fpm
 
 WORKDIR /app
