@@ -24,7 +24,7 @@ COPY . /var/www/html
 
 FROM php:7.2.5-fpm
 
-WORKDIR "/app"
+WORKDIR /app
 
 RUN apt-get update
 
