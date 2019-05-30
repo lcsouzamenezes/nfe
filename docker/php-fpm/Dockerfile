@@ -1,3 +1,27 @@
+FROM composer:1.7 as vendor
+
+WORKDIR /app
+
+COPY . /app
+RUN ls -la
+
+RUN composer install \
+    --ignore-platform-reqs \
+    --no-interaction \
+    --no-plugins \
+    --no-scripts \
+    --prefer-dist
+
+FROM nginx:mainline-alpine
+
+# COPY docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+
+COPY docker/nginx/ /etc/nginx/conf.d/
+
+# RUN ls -la /etc/nginx/conf.d/
+
+COPY . /var/www/html
+
 FROM php:7.2.5-fpm
 
 WORKDIR "/app"
@@ -23,5 +47,7 @@ RUN docker-php-ext-install soap
 RUN ls -la
 
 COPY . /app
+
+COPY --from=vendor /app/vendor/ /app/vendor/
 
 ENTRYPOINT ["/app/docker/php-fpm/entrypoint.sh"]
