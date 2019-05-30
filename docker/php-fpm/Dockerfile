@@ -40,4 +40,7 @@ COPY . /app
 
 COPY --from=vendor /app/vendor/ /app/vendor/
 
+RUN chmod -R 777 /app/storage
+
+
 ENTRYPOINT ["/app/docker/php-fpm/entrypoint.sh"]
