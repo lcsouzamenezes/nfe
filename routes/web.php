@@ -12,7 +12,7 @@ $router->post('/gerar-nfe/{ambiente}','\App\Nfe\Http\Controllers\GerarNota@index
 $router->get('/consultar-recibo/{recibo}/{ambiente}','\App\Nfe\Http\Controllers\ConsultarRecibo@index');
 
 $router->get('/db', function () {
-    $user = \App\NfeModel::all();
+    $user = \App\Nfe\Models\NFe::all();
     dd($user);
 });
 

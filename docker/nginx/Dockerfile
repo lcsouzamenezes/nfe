@@ -29,14 +29,9 @@ RUN composer install \
 
 FROM nginx:mainline-alpine
 
-# COPY docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
-
 COPY docker/nginx/ /etc/nginx/conf.d/
 
-# RUN ls -la /etc/nginx/conf.d/
-
 COPY . /var/www/html
-
 
 # support running as arbitrary user which belogs to the root group
 RUN chmod g+rwx /var/cache/nginx /var/run /var/log/nginx
