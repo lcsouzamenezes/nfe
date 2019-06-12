@@ -6,7 +6,6 @@ use \App\Nfe\Models\Cert;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
-
 class CadastrarCertificado
 {
     public function cadastrar($request)
