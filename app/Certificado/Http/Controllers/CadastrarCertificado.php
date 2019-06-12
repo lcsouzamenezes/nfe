@@ -6,7 +6,6 @@ use App\Certificado\Services\CadastrarCertificado as CadastrarCertificadoService
 use Illuminate\Http\Request;
 use NFePHP\Common\Exception\ValidatorException;
 
-
 class CadastrarCertificado
 {
     public function cadastrar(Request $request)
@@ -27,6 +26,5 @@ class CadastrarCertificado
         } catch (ValidatorException $e) {
             return response()->json($e->getMessage(), 400);
         }
-
     }
 }
