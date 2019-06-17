@@ -72,7 +72,7 @@ objects:
               ports:
                 - containerPort: 8081
                   protocol: TCP
-                - containerPort: 8433
+                - containerPort: 8443
                   protocol: TCP
           dnsPolicy: ClusterFirst
           restartPolicy: Always
@@ -88,6 +88,21 @@ objects:
               name: 'nfe-backend-nginx:latest'
               namespace: nf-e-hmg
           type: ImageChange
+
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: nfe-backend-nginx
+      namespace: nf-e-hmg
+    spec:
+      ports:
+        - port: 8443
+          protocol: TCP
+          targetPort: 8443
+      selector:
+        deploymentconfig: nfe-backend-nginx
+      type: ClusterIP
 
   - apiVersion: route.openshift.io/v1
     kind: Route
