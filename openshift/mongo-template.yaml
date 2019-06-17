@@ -1,0 +1,128 @@
+kind: "Template"
+apiVersion: "v1"
+metadata:
+    name: nf-e-hmg
+    annotations:
+      description: "nf-e-hmg"
+      tags: "mongo"
+objects:
+
+  - apiVersion: image.openshift.io/v1
+    kind: ImageStream
+    metadata:
+      name: nfe-backend-mongo
+      namespace: nf-e-hmg
+    spec:
+      lookupPolicy:
+        local: false
+
+  - apiVersion: build.openshift.io/v1
+    kind: Build
+    metadata:
+      name: nfe-backend-mongo
+      namespace: nf-e-hmg
+    spec:
+      nodeSelector: null
+      output:
+        to:
+          kind: ImageStreamTag
+          name: 'nfe-backend-mongo:latest'
+      revision:
+        type: Git
+      source:
+        git:
+          ref: master
+          uri: 'https://github.com/culturagovbr/nfe'
+        type: Git
+      strategy:
+        dockerStrategy:
+          dockerfilePath: docker/mongo/Dockerfile
+          forcePull: true
+          env:
+             - name: "MONGO_INITDB_ROOT_USERNAME"
+               value: "root"
+             - name: "MONGO_INITDB_ROOT_PASSWORD"
+               value: root
+        type: Docker
+    triggeredBy: null
+
+  - kind: StatefulSet
+    apiVersion: apps/v1beta1
+    metadata:
+      name: "nfe-backend-mongo"
+      namespace: nf-e-hmg
+      labels:
+        app: nfe-backend-mongo
+    spec:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: nfe-backend-mongo
+        spec:
+          containers:
+            - image: "docker-registry.default.svc:5000/nf-e-hmg/nfe-backend-mongo"
+              name: nfe-backend-mongo
+              imagePullPolicy: Always
+              ports:
+                - containerPort: 27017
+              volumeMounts:
+                - name: mongo-data
+                  mountPath: /data/db
+              env:
+                - name: MONGODB_USER
+                  value: "root"
+                - name: MONGODB_PASSWORD
+                  value: "root"
+                - name: MONGODB_DATABASE
+                  value: "nfe"
+          restartPolicy: Always
+      triggers:
+        - type: ConfigChange
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - nfe-backend-mongo
+            from:
+              kind: ImageStreamTag
+              name: 'nfe-backend-mongo:latest'
+              namespace: nf-e-hmg
+      type: ImageChange
+      volumeClaimTemplates:
+        - metadata:
+            name: mongo-data
+          spec:
+            accessModes: [ ReadWriteOnce ]
+            resources:
+              requests:
+               storage: "1Gi"
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: nfe-backend-mongo
+      namespace: nf-e-hmg
+      labels:
+        app: nfe-backend-mongo
+    spec:
+      ports:
+        - port: 27017
+          protocol: TCP
+          targetPort: 27017
+      selector:
+        app: nfe-backend-mongo
+
+  - apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      labels:
+        app: nfe-backend-mongo
+      name: nfe-backend-mongo
+      namespace: nf-e-hmg
+    spec:
+      port:
+        targetPort: 27017
+      to:
+        kind: Service
+        name: nfe-backend-mongo
+        weight: 100
