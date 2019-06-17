@@ -1,0 +1,103 @@
+kind: "Template"
+apiVersion: "v1"
+metadata:
+    name: nf-e-hmg
+    annotations:
+      description: "nf-e-hmg"
+      tags: "php"
+objects:
+
+  - apiVersion: image.openshift.io/v1
+    kind: ImageStream
+    metadata:
+      name: nfe-backend-php
+      namespace: nf-e-hmg
+    spec:
+      lookupPolicy:
+        local: false
+
+  - apiVersion: build.openshift.io/v1
+    kind: Build
+    metadata:
+      name: nfe-backend-php
+      namespace: nf-e-hmg
+    spec:
+      nodeSelector: null
+      output:
+        to:
+          kind: ImageStreamTag
+          name: 'nfe-backend-php:latest'
+      source:
+        git:
+          ref: master
+          uri: 'https://github.com/culturagovbr/nfe'
+        type: Git
+      strategy:
+        dockerStrategy:
+          dockerfilePath: docker/php-fpm/Dockerfile
+        type: Docker
+      triggeredBy: null
+
+  - apiVersion: apps.openshift.io/v1
+    kind: DeploymentConfig
+    metadata:
+      name: nfe-backend-php
+      namespace: nf-e-hmg
+    spec:
+      replicas: 1
+      selector:
+        name: nfe-backend-php
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            name: nfe-backend-php
+        spec:
+          containers:
+            - image: nfe-backend-php
+              imagePullPolicy: Always
+              name: nfe-backend-php
+              ports:
+                - containerPort: 9000
+                  protocol: TCP
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+      triggers:
+        - type: ConfigChange
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - nfe-backend-php
+            from:
+              kind: ImageStreamTag
+              name: 'nfe-backend-php:latest'
+              namespace: nf-e-hmg
+          type: ImageChange
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: nfe-php-fpm
+      namespace: nf-e-hmg
+    spec:
+      ports:
+        - port: 9000
+          protocol: TCP
+          targetPort: 9000
+      selector:
+        deploymentconfig: nfe-backend-php
+      type: ClusterIP
