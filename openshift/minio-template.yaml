@@ -1,0 +1,113 @@
+kind: "Template"
+apiVersion: "v1"
+metadata:
+    name: nf-e-hmg
+    annotations:
+      description: "nf-e-hmg"
+      tags: "minio"
+objects:
+  - apiVersion: image.openshift.io/v1
+    kind: ImageStream
+    metadata:
+      name: nfe-backend-minio
+      namespace: nf-e-hmg
+    spec:
+      lookupPolicy:
+        local: false
+
+  - apiVersion: build.openshift.io/v1
+    kind: Build
+    metadata:
+      name: nfe-backend-minio
+      namespace: nf-e-hmg
+    spec:
+      nodeSelector: null
+      output:
+        to:
+          kind: ImageStreamTag
+          name: 'nfe-backend-minio:latest'
+      revision:
+        type: Git
+      source:
+        git:
+          ref: master
+          uri: 'https://github.com/culturagovbr/nfe'
+        type: Git
+      strategy:
+        dockerStrategy:
+          dockerfilePath: docker/minio/Dockerfile
+          forcePull: true
+          env:
+             - name: "MINIO_ACCESS_KEY"
+               value: "testeteste"
+             - name: "MINIO_SECRET_KEY"
+               value: "teste1234"
+        type: Docker
+      triggeredBy: null
+
+  - apiVersion: apps/v1beta1
+    kind: StatefulSet
+    metadata:
+      name: "nfe-backend-minio"
+      namespace: nf-e-hmg
+      labels:
+        app: nfe-backend-minio
+    spec:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: nfe-backend-minio
+        spec:
+          containers:
+            - image: "docker-registry.default.svc:5000/nf-e-hmg/nfe-backend-minio"
+              name: nfe-backend-minio
+              imagePullPolicy: Always
+              ports:
+                - containerPort: 9000
+              volumeMounts:
+                - name: minio-data
+                  mountPath: /data
+              env:
+                - name: "MINIO_ACCESS_KEY"
+                  value: "testeteste"
+                - name: "MINIO_SECRET_KEY"
+                  value: "teste1234"
+              args:
+                - server
+                - /data
+          restartPolicy: Always
+      triggers:
+        - type: ConfigChange
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - nfe-backend-minio
+            from:
+              kind: ImageStreamTag
+              name: 'nfe-backend-minio:latest'
+              namespace: nf-e-hmg
+      type: ImageChange
+      volumeClaimTemplates:
+        - metadata:
+            name: minio-data
+          spec:
+            accessModes: [ ReadWriteOnce ]
+            resources:
+              requests:
+                storage: "1Gi"
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: nfe-backend-minio
+      namespace: nf-e-hmg
+      labels:
+        app: nfe-backend-minio
+    spec:
+      ports:
+        - port: 9000
+          protocol: TCP
+          targetPort: 9000
+      selector:
+          app: nfe-backend-minio
