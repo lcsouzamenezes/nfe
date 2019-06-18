@@ -72,3 +72,5 @@ $router->post('/nfe/criar/{ambiente}/{certId}','\App\Nfe\Http\Controllers\CriarN
 $router->get('/nfe/download-local/{chNfe}','\App\Nfe\Http\Controllers\DownloadXml@get');
 
 $router->post('/nfe/admin/cadastrar-certificado','\App\Certificado\Http\Controllers\CadastrarCertificado@cadastrar');
+
+$router->post('/nfe/admin/listar-certificados','\App\Certificado\Http\Controllers\ListarCertificado@listar');
