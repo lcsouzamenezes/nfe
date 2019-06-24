@@ -1,6 +1,6 @@
 # NF-E 
 
-Projeto para comunicação com Sefaz, absttraindo a API em soap para Rest.
+Projeto para comunicação com SEFAZ, abstraindo a API em SOAP para Rest.
 
 <a href="https://app.zenhub.com/workspaces/nfe-5c86a3bf6cd59109e9e64e82/boards?repos=171279463" target="_blank">
     <img src="https://img.shields.io/badge/Managed_with-ZenHub-5e60ba.svg" alt="zenhub">
@@ -23,6 +23,9 @@ Para parar os containers basta digitar:
 docker-compose down
 ```
 
+
+
+
 ## Tecnologias:
 * [Docker](https://www.docker.com/)
 * [PHP 7.x](http://php.net/)
@@ -33,6 +36,7 @@ docker-compose down
 * [Travis](https://travis-ci.com/culturagovbr/nfe)
 * [Min.io](https://www.min.io/)
 * [Mongo](https://www.mongodb.com/)
+* [API Blueprint](https://apiblueprint.org/)
 
 Link uteis:
 [Consulta NFE Simplificada](http://www.nfe.fazenda.gov.br/portal/consultaRecaptcha.aspx?tipoConsulta=resumo&tipoConteudo=d09fwabTnLk=)
