@@ -75,7 +75,7 @@ class Distribuicao
             $nfe->save();
 
             $disk = Storage::disk('s3');
-            $disk->put($data['NFe']['infNFe']['attributes']['Id'].'.xml', $content);
+            $disk->put($data['protNFe']['infProt']['chNFe'].'.xml', $content);
         }
     }
 }
