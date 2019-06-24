@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Carbon\Carbon;
 
+/**
+ * Class Cert
+ * @todo enviar para o Modulo Certificado
+ */
 class Cert extends Eloquent
 {
     protected $connection = 'mongodb';

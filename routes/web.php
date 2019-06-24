@@ -1,20 +1,14 @@
 <?php
-
+/**
+ * @todo colocar 'as' em todas as rotas
+ */
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return '<p>Acessar a Documentação nesse <a href="https://github.com/culturagovbr/nfe/blob/dev/API_Specification.apib"> link </a></p>';
 });
-$router->get('/check', [
-    'as' => 'profile', 'uses' => 'ExampleController@check'
-]);
 
 $router->post('/gerar-nfe/{ambiente}','\App\Nfe\Http\Controllers\GerarNota@index');
 
 $router->get('/consultar-recibo/{recibo}/{ambiente}','\App\Nfe\Http\Controllers\ConsultarRecibo@index');
-
-$router->get('/db', function () {
-    $user = \App\NfeModel::all();
-    dd($user);
-});
 
 $router->get(
     '/download/{codigoAcesso}/{ambiente}',
@@ -50,15 +44,6 @@ $router->get(
         'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\ListarNFe@listarNotas'
     ]
 );
-
-$router->group(['middleware' => 'jwt'], function () use ($router) {
-    $router->get(
-        '/user',
-        [
-            'uses' => 'ExampleController@check'
-        ]
-    );
-});
 
 $router->get(
     '/conta/usuario/{token}',
