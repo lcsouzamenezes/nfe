@@ -20,7 +20,9 @@ services:
         ipv4_address: 172.15.1.2
 
   nfe-php-fpm:
-    build: docker/php-fpm
+    build:
+      context: .
+      dockerfile: docker/docker/php-fpm/Dockerfile
     container_name: nfe-php-fpm
     working_dir: /app
     volumes:
