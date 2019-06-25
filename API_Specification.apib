@@ -1,141 +1,11 @@
 FORMAT: 1A
-HOST: http://polls.apiblueprint.org/
+HOST: https://localhost
 
 # NF-E
 
-Integração com dados da sefaz com foco na Nota Fiscal Eletrônica.
+Integração com dados da SEFAZ com foco na Nota Fiscal Eletrônica.
 
-## NF-E [/nfe?codigo={codigo}]
-
-### Consultar Nota Fiscal com Codigo de Acesso [GET]
-
-Codigo é necessario codigo de acesso de 44 caracteres para retorna dados da NFE.
-+ Parameters
-    + codigo (string)
-
-+ Request
-    + Parameters
-        + codigo (string, required)
-
-+ Response 200 (application/json)
-
-        {
-            "codigo": "12340623004804000164550000000002251000002258"
-        }
-
-+ Response 400 (application/json)
-
-        {
-            "erro": "nota fiscal eletronica não encontrada!"
-        }
-
-### Salvar dados NFE [POST]
-
-Gera e salva os dados da NF-E.
-
-+ Request 200 (application/json)
-    + Attributes
-        + cnpj: 111.111.11/0001-98 (string, required)
-
-+ Response 200 (application/json)
-
-        {
-              "message": "Salvo com sucesso"
-        }
-
-+ Response 400 (application/json)
-
-        {
-            "message": "não foi possivel gerar a NF-E!"
-        }
-
-
-## VALIDAR NFE [/validar-nfe]
-### Validar Nota Fiscal [GET]
-
-Verifica junto a Sefaz a validade da NFE.
-
-+ Response 200 (application/json)
-
-        {
-            "codigo": "12340623004804000164550000000002251000002258"
-        }
-
-
-## Extrair NF-E [/extrair-nfe]
-### Extrai  Nota Fiscal [GET]
-
-Recebe todas as notas fiscais do cnpj.
-
-+ Response 200 (application/json)
-
-        {
-            "codigo": "12340623004804000164550000000002251000002258"
-        }
-
-
-## Download NF-E [/download-nfe/{codigoAcesso}/{ambiente}]
-### Download  Nota Fiscal [GET]
-
-Download da NF-E.
-
-* O Emitente da nota não pode fazer o download da nota.
-
-+ Response 200 (application/json)
-
-        {
-            "codigo": "12340623004804000164550000000002251000002258"
-        }
-
-+ Response 400 (application/json)
-
-        {
-           "attributes":{
-              "versao":"1.01"
-           },
-           "tpAmb":"2",
-           "verAplic":"1.1.9",
-           "cStat":"641",
-           "xMotivo":"Rejeicao: NF-e indisponivel para o emitente",
-           "dhResp":"2019-03-25T09:40:30-03:00"
-        }
-
-## Importar NF-E [/importar-nfe]
-### Importar  Nota Fiscal [GET]
-
-recebe uma nota por download.
-
-+ Response 200 (application/json)
-
-        {
-            "codigo": "12340623004804000164550000000002251000002258"
-        }
-
-## Gerar NF-E [/gerar-nfe/{ambiente}]
-### Geração Nota Fiscal [POST]
-
-Geração da NF-E.
-
-* Para a geração da NF-E será preciso do cnpj e da inscrição estadual
-
-+ Request 200 (application/json)
-    + Attributes
-        + nNF: 12 (string, required)
-        + CNPJ: 111.111.11/0001-98 (string, required)
-        + IE: 0000366100100 (string, required)
-+ Response 200 (application/json)
-
-        {
-              "message": "Salvo com sucesso"
-        }
-
-+ Response 400 (application/json)
-
-        {
-            "message": "não foi possivel gerar a NF-E!"
-        }
-
-## Consultar Recibo [/consultar-recibo/{recibo}]
+## Consultar Recibo [/nfe/consultar-recibo/{recibo}/{ambiente}]
 ### Consultar Recibo Nota Fiscal [GET]
 
 Consultar recibo da NF-E.
@@ -157,7 +27,7 @@ Consultar recibo da NF-E.
             "message": "rejeitada"
         }
 
-## Listar NFE [/listar-notas/{usuario}]
+## Listar NFE [/nfe/listar-notas/{usuario}]
 ### Lista todas NFE  [GET]
 
 Retorna lista de todas as NF-Es.
@@ -186,7 +56,7 @@ Retorna lista de todas as NF-Es.
             "message": "Dados não encontrados"
         }
 
-## Busca Dados da NFE [/buscar-notas/{id}]
+## Busca Dados da NFE [/nfe/buscar-notas/{id}]
 ### Retorna os dados da NFE  [GET]
 
 Retorna todos os dados da NF-E.
@@ -228,25 +98,25 @@ Retorna todos os dados da NF-E.
 ## Criar NFE [/nfe/criar/{ambiente}/{certId}]
 ### Criação das NFE  [POST]
 * Para a criação das NF-E será preciso dos seguintes campos
-    + Request 200 (application/json)
-        + Attributes
-            + xNF: 1050 (string, required)
-            + xNome: Batman (string, required)
-            + CEP: 70330545 (string, required)
-            + xLgr: CLS 102 Bloco D (string, required)
-            + xCpl: Apt 645 (string, required)
-            + xBairro: Asa Sul (string, required)
-            + xMun: Brasília (string, required)
-            + nro: 30 (string, required)
-            + UF: DF (string, required)
-            + cpfCnpj: 487.851.370-57 / 73.768.627/0001-60 (string, required)
-            + natOp: Descricao da venda (string, required)
-            + xProd: Artigos para festa (string, required)
-            + qCom:  2 (number, required)
-            + qTrib: 2 (number, required)
-            + vUnCom:  150 (number, required)
-            + vUnTrib: 150 (number, required)
-            + UF: DF (string, required)
++ Request 200 (application/json)
+    + Attributes
+        + nNF: 1050 (string, required)
+        + xNome: Batman (string, required)
+        + CEP: 70330545 (string, required)
+        + xLgr: CLS 102 Bloco D (string, required)
+        + xCpl: Apt 645 (string, required)
+        + xBairro: Asa Sul (string, required)
+        + xMun: Brasília (string, required)
+        + nro: 30 (string, required)
+        + UF: DF (string, required)
+        + cpfCnpj: 487.851.370-57 / 73.768.627/0001-60 (string, required)
+        + natOp: Descricao da venda (string, required)
+        + xProd: Artigos para festa (string, required)
+        + qCom:  2 (number, required)
+        + qTrib: 2 (number, required)
+        + vUnCom:  150 (number, required)
+        + vUnTrib: 150 (number, required)
+        + UF: DF (string, required)
 + Response 200 (application/json)
 
         {
@@ -280,5 +150,50 @@ Distribuição das NF-e em lote
         {
             "error":{
                 "message": "Notas não puderam ser recuperadas!"
+            }
+        }
+
+
+##  NF-e Certificado [/admin/cadastrar-certificado]
+### Cadastro dos Certificados [POST]
+
+Cadastrar Certificados
+
+
+* Para a geração da NF-E será preciso do cnpj e da inscrição estadual
+
++ Request 200 (application/json)
+    + Attributes
+        + razaosocial: Nome teste (string, required)
+        + cnpj: 20.190.686/0001-38 (string, required)
+        + tpAmb: 1/2 (string, required)
+        + pass: senha (string, required)
+        + path: caminho (string, required)
++ Response 200 (application/json)
+
+         { "data":
+                    {"message":"Criado com Sucesso!"}
+                }
+
++ Response 400 (application/json)
+
+        {
+            "message": "Error"
+        }
+
+## NF-e Listar Certificado [/admin/listar-certificado]
+Listar Certificados
+### Listagem dos Certificados [GET]
++ Response 200 (application/json)
+
+        { "data":
+            {"message":"Criado com Sucesso!"}
+        }
+
++ Response 400 (application/json)
+
+        {
+            "error":{
+                "message": "Error"
             }
         }

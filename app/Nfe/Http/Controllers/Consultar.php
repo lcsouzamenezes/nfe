@@ -12,6 +12,10 @@ use Illuminate\Http\Request;
 
 use \App\Nfe\Exceptions\NfeException;
 
+/**
+ * Class Consultar
+ * @todo refatoração
+ */
 class Consultar
 {
     public function get(Request $request, $codigoAcesso, $ambiente)
