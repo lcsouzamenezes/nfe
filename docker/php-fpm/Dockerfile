@@ -1,6 +1,19 @@
-FROM php:7.2.5-fpm
+FROM composer:1.7 as vendor
 
-WORKDIR "/app"
+WORKDIR /app
+
+COPY . /app
+
+RUN ls -la
+
+RUN composer install \
+    --ignore-platform-reqs \
+    --no-interaction \
+    --no-plugins \
+    --no-scripts \
+    --prefer-dist
+
+FROM php:7.2.5-fpm
 
 RUN apt-get update
 
@@ -20,8 +33,12 @@ RUN apt-get install -y libxml2-dev
 
 RUN docker-php-ext-install soap
 
-RUN ls -la
+WORKDIR /app
 
 COPY . /app
+
+COPY --from=vendor /app/vendor/ /app/vendor/
+
+RUN chmod -R 777 /app/storage
 
 ENTRYPOINT ["/app/docker/php-fpm/entrypoint.sh"]
