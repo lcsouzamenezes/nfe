@@ -8,6 +8,10 @@ use NFePHP\NFe\Common\Standardize;
 use NFePHP\NFe\Complements;
 use Illuminate\Http\Request;
 
+/**
+ * Class ConsultarRecibo
+ * @todo refatorar ações do certificado
+ */
 class ConsultarRecibo
 {
     public function index(Request $request, $recibo, $ambiente)

@@ -1,76 +1,115 @@
 <?php
-
+/**
+ * @todo colocar 'as' em todas as rotas
+ */
 $router->get('/', function () use ($router) {
-    return $router->app->version();
-});
-$router->get('/check', [
-    'as' => 'profile', 'uses' => 'ExampleController@check'
-]);
-
-$router->post('/gerar-nfe/{ambiente}','\App\Nfe\Http\Controllers\GerarNota@index');
-
-$router->get('/consultar-recibo/{recibo}/{ambiente}','\App\Nfe\Http\Controllers\ConsultarRecibo@index');
-
-$router->get('/db', function () {
-    $user = \App\Nfe\Models\NFe::all();
-    dd($user);
+    return '<p>Acessar a Documentação nesse <a href="https://github.com/culturagovbr/nfe/blob/dev/API_Specification.apib"> link </a></p>';
 });
 
-$router->get(
-    '/download/{codigoAcesso}/{ambiente}',
-    [
-        'as' => 'download', 'uses' => '\App\Nfe\Http\Controllers\Download@get'
-    ]
+//Rotas Módulo Conta
+$router->group(
+    ['namespace' => '\App\conta\Http\Controllers', 'prefix' => '/conta'],
+    function () use ($router) {
+        $router->get(
+            '/usuario/{token}',
+            [
+                'as' => 'usuario',
+                'uses' => 'Autenticacao@usuario'
+            ]
+        );
+    }
 );
 
-$router->get(
-    '/consultar/{codigoAcesso}/{ambiente}',
-    [
-        'as' => 'consulta', 'uses' => '\App\Nfe\Http\Controllers\Consultar@get'
-    ]
-);
-
-$router->get(
-    '/nfe/distribuicao/{ambiente}/{certId}',
-    [
-        'as' => 'distribuicao', 'uses' => '\App\Nfe\Http\Controllers\Distribuicao@get'
-    ]
-);
-
-$router->get(
-    '/nfe/buscar-notas/{id}',
-    [
-        'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\BuscarDadosNFe@buscarNFe'
-    ]
-);
-
-$router->get(
-    '/nfe/listar-notas/{usuario}',
-    [
-        'as' => 'notas', 'uses' => '\App\Nfe\Http\Controllers\ListarNFe@listarNotas'
-    ]
-);
-
-$router->group(['middleware' => 'jwt'], function () use ($router) {
-    $router->get(
-        '/user',
+//Rotas Módulo NFe
+$router->group(
+    ['namespace' => '\App\Nfe\Http\Controllers', 'prefix' => '/nfe'],
+    function () use ($router) {
+    //Rotas Módulo NFe
+    $router->post(
+        '/gerar-nfe/{ambiente}',
         [
-            'uses' => 'ExampleController@check'
+            'as' => 'gerar-nfe',
+            'uses' => 'GerarNota@index'
+        ]
+    );
+
+    $router->get(
+        '/consultar-recibo/{recibo}/{ambiente}',
+        [
+            'as' => 'consultar-recibo',
+            'uses' => 'ConsultarRecibo@index'
+        ]
+    );
+
+    $router->get(
+        '/consultar/{codigoAcesso}/{ambiente}',
+        [
+            'as' => 'consulta',
+            'uses' => 'Consultar@get'
+        ]
+    );
+
+    $router->get(
+        '/distribuicao/{ambiente}/{certId}',
+        [
+            'as' => 'distribuicao',
+            'uses' => 'Distribuicao@get'
+        ]
+    );
+
+    $router->get(
+        '/buscar-notas/{id}',
+        [
+            'as' => 'notas',
+            'uses' => 'BuscarDadosNFe@buscarNFe'
+        ]
+    );
+
+    $router->get(
+        '/listar-notas/{usuario}',
+        [
+            'as' => 'notas',
+            'uses' => 'ListarNFe@listarNotas'
+        ]
+    );
+
+    $router->post(
+        '/criar/{ambiente}/{certId}',
+        [
+            'as' => 'criar',
+            'uses' => 'CriarNFe@index'
+        ]
+    );
+
+    $router->get(
+        '/download-local/{chNfe}',
+        [
+            'as' => 'download-local',
+            'uses' => 'DownloadXml@get'
         ]
     );
 });
 
-$router->get(
-    '/conta/usuario/{token}',
-    [
-        'as' => 'usuario', 'uses' => '\App\Conta\Http\Controllers\Autenticacao@usuario'
-    ]
-);
 
-$router->post('/nfe/criar/{ambiente}/{certId}','\App\Nfe\Http\Controllers\CriarNFe@index');
+//Rotas parte Administrativa Certificado
+$router->group(['prefix' => '/admin'], function () use ($router) {
 
-$router->get('/nfe/download-local/{chNfe}','\App\Nfe\Http\Controllers\DownloadXml@get');
+    //Rotas Módulo Certificado
+    $router->post(
+        '/certificado',
+        [
+            'as' => 'cadastrar-certificado',
+            'uses' => '\App\Certificado\Http\Controllers\CadastrarCertificado@cadastrar'
+        ]
+    );
+    $router->get(
+        '/certificados',
+        [
+            'as' => 'listar-certificados',
+            'uses' => '\App\Certificado\Http\Controllers\ListarCertificado@listar'
+        ]
+    );
+});
 
-$router->post('/nfe/admin/cadastrar-certificado','\App\Certificado\Http\Controllers\CadastrarCertificado@cadastrar');
 
-$router->post('/nfe/admin/listar-certificados','\App\Certificado\Http\Controllers\ListarCertificado@listar');
+

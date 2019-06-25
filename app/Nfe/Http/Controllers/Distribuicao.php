@@ -17,6 +17,10 @@ use \App\Nfe\Exceptions\NfeException;
 
 use Carbon\Carbon;
 
+/**
+ * Class Distribuicao
+ * @todo refatoração
+ */
 class Distribuicao extends Controller
 {
     public function get(
