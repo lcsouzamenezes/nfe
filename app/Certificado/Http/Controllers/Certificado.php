@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Certificado\Http\Controllers;
+
+use app\Certificado\Services\Certificado as CertificadoService;
+use Illuminate\Http\Request;
+use NFePHP\Common\Exception\ValidatorException;
+
+class Certificado
+{
+    public function cadastrar(Request $request)
+    {
+        $file = $request['path'];
+
+        if ($file->getClientOriginalExtension() != 'pfx') {
+            return response()->json('Somente arquivo .pfx', 400);
+        }
+
+        try {
+            $input = $request->all();
+
+            $service = new CertificadoService();
+            $service->cadastrar($input);
+
+            return response()->json('Cadastrado com sucesso', 200);
+        } catch (ValidatorException $e) {
+            return response()->json($e->getMessage(), 400);
+        }
+    }
+
+    public function listar()
+    {
+        try {
+            $serviceCert = new CertificadoService();
+            $service = $serviceCert->listarCertificado();
+
+            return response()->json($service, 200);
+        } catch (ValidatorException $e) {
+            return response()->json($e->getMessage(), 400);
+        }
+    }
+
+    public function excluir($id)
+    {
+        $service = new CertificadoService();
+        $service->deletarCertificado($id);
+    }
+
+}
