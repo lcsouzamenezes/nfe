@@ -1,34 +1,70 @@
 FORMAT: 1A
 HOST: https://localhost
 
-# NF-E
+# NF-e
 
 Integração com dados da SEFAZ com foco na Nota Fiscal Eletrônica.
 
-## Consultar Recibo [/nfe/consultar-recibo/{recibo}/{ambiente}]
-### Consultar Recibo Nota Fiscal [GET]
-
-Consultar recibo da NF-E.
-
-* Para a geração da NF-E será preciso do cnpj e da inscrição estadual
-
-+ Request 200 (application/json)
+## NF-e Criar [/nfe/criar/{ambiente}/{certId}]
+### Criação das NF-e  [POST]
+* Para a criação das NF-E será preciso dos seguintes campos
++ Request (application/json)
     + Attributes
-        + recibo: 533002185307626 (string, required)
+        + nNF: 1050 (string, required)
+        + xNome: Batman (string, required)
+        + CEP: 70330545 (string, required)
+        + xLgr: CLS 102 Bloco D (string, required)
+        + xCpl: Apt 645 (string, required)
+        + xBairro: Asa Sul (string, required)
+        + xMun: Brasília (string, required)
+        + nro: 30 (string, required)
+        + UF: DF (string, required)
+        + cpfCnpj: 487.851.370-57 / 73.768.627/0001-60 (string, required)
+        + natOp: Descricao da venda (string, required)
+        + xProd: Artigos para festa (string, required)
+        + qCom:  2 (number, required)
+        + qTrib: 2 (number, required)
+        + vUnCom:  150 (number, required)
+        + vUnTrib: 150 (number, required)
+        + UF: DF (string, required)
+
 + Response 200 (application/json)
 
         {
-              "message": "Salvo com sucesso"
+            "message": "criado com sucesso"
         }
 
 + Response 400 (application/json)
 
         {
-            "message": "rejeitada"
+            "message": "This XML is not valid. Element '{http://www.portalfiscal.inf.br/nfe}': This element is not expected. Expected is ( {http://www.portalfiscal.inf.br/nfe} )."
         }
 
-## Listar NFE [/nfe/listar-notas/{usuario}]
-### Lista todas NFE  [GET]
+## NF-e Busca Dados [/nfe/buscar-notas/{id}]
+### Retorna os dados da NF-e  [GET]
+
+Retorna todos os dados da NF-E.
+
+* Para o retorno dos dados da NF-E será preciso do _id.
+
++ Request 200 (application/json)
+    + Attributes
+        + id: 5caf8125d75b6a00075c1d40 (string, required)
+
++ Response 200 (application/json)
+
+        {
+            "message": "sucesso"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "message": "não foi possivel localizar a NF-E!"
+        }
+
+## NF-e Listar [/nfe/listar-notas/{usuario}]
+### Lista todas NF-e  [GET]
 
 Retorna lista de todas as NF-Es.
 
@@ -56,30 +92,10 @@ Retorna lista de todas as NF-Es.
             "message": "Dados não encontrados"
         }
 
-## Busca Dados da NFE [/nfe/buscar-notas/{id}]
-### Retorna os dados da NFE  [GET]
-
-Retorna todos os dados da NF-E.
-
-* Para o retorno dos dados da NF-E será preciso do _id
-+ Request 200 (application/json)
-    + Attributes
-        + id: 5caf8125d75b6a00075c1d40 (string, required)
-+ Response 200 (application/json)
-
-        {
-            "message": "sucesso"
-        }
-
-+ Response 400 (application/json)
-
-        {
-            "message": "não foi possivel localizar a NF-E!"
-        }
-
-## Download xml NFe [/nfe/download-local/{chNfe}]
+## NF-e Download xml [/nfe/download-local/{chNfe}]
 ### Download do XML [GET]
 * Para o download do arquivo xml da NF-E será preciso do número chNfe.
+
 + Request 200 (application/json)
     + Attributes
         + Id: 53190532944459000130550010000009021292641210 (string, required)
@@ -93,40 +109,6 @@ Retorna todos os dados da NF-E.
 
         {
               "message": "não foi possivel localizar a NF-E!"
-        }
-
-## Criar NFE [/nfe/criar/{ambiente}/{certId}]
-### Criação das NFE  [POST]
-* Para a criação das NF-E será preciso dos seguintes campos
-+ Request 200 (application/json)
-    + Attributes
-        + nNF: 1050 (string, required)
-        + xNome: Batman (string, required)
-        + CEP: 70330545 (string, required)
-        + xLgr: CLS 102 Bloco D (string, required)
-        + xCpl: Apt 645 (string, required)
-        + xBairro: Asa Sul (string, required)
-        + xMun: Brasília (string, required)
-        + nro: 30 (string, required)
-        + UF: DF (string, required)
-        + cpfCnpj: 487.851.370-57 / 73.768.627/0001-60 (string, required)
-        + natOp: Descricao da venda (string, required)
-        + xProd: Artigos para festa (string, required)
-        + qCom:  2 (number, required)
-        + qTrib: 2 (number, required)
-        + vUnCom:  150 (number, required)
-        + vUnTrib: 150 (number, required)
-        + UF: DF (string, required)
-+ Response 200 (application/json)
-
-        {
-            "message": "criado com sucesso"
-        }
-
-+ Response 400 (application/json)
-
-        {
-            "message": "This XML is not valid. Element '{http://www.portalfiscal.inf.br/nfe}': This element is not expected. Expected is ( {http://www.portalfiscal.inf.br/nfe} )."
         }
 
 ## NF-e Distribuição [/nfe/distribuicao/{ambiente}/{certId}]
@@ -153,8 +135,30 @@ Distribuição das NF-e em lote
             }
         }
 
+## NF-e Consultar Recibo [/nfe/consultar-recibo/{recibo}/{ambiente}]
+### Consultar Recibo Nota Fiscal [GET]
 
-##  NF-e Certificado [/admin/cadastrar-certificado]
+Consultar recibo da NF-E.
+
+* Para a geração da NF-E será preciso do cnpj e da inscrição estadual
+
++ Request 200 (application/json)
+    + Attributes
+        + recibo: 533002185307626 (string, required)
++ Response 200 (application/json)
+
+        {
+              "message": "Salvo com sucesso"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "message": "rejeitada"
+        }
+
+
+## Certificado Cadastrar [/admin/cadastrar-certificado]
 ### Cadastro dos Certificados [POST]
 
 Cadastrar Certificados
@@ -181,7 +185,7 @@ Cadastrar Certificados
             "message": "Error"
         }
 
-## NF-e Listar Certificado [/admin/listar-certificado]
+## Certificado Listar [/admin/listar-certificado]
 Listar Certificados
 ### Listagem dos Certificados [GET]
 + Response 200 (application/json)
