@@ -22,7 +22,7 @@ services:
   nfe-php-fpm:
     build:
       context: .
-      dockerfile: docker/docker/php-fpm/Dockerfile
+      dockerfile: docker/php-fpm/Dockerfile
     container_name: nfe-php-fpm
     working_dir: /app
     volumes:
