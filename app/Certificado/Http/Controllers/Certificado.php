@@ -2,7 +2,7 @@
 
 namespace App\Certificado\Http\Controllers;
 
-use app\Certificado\Services\Certificado as CertificadoService;
+use App\Certificado\Services\Certificado as CertificadoService;
 use Illuminate\Http\Request;
 use NFePHP\Common\Exception\ValidatorException;
 
@@ -43,7 +43,7 @@ class Certificado
     public function excluir($id)
     {
         $service = new CertificadoService();
-        $service->deletarCertificado($id);
+        $service->excluirCertificado($id);
     }
 
 }
