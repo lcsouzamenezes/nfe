@@ -6,3 +6,6 @@ Homestead.yaml
 docker-compose.yml
 composer.phar
 codigoAcesso.txt
+minio
+data
+output.html

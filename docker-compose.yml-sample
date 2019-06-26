@@ -9,9 +9,8 @@ services:
     volumes:
       - .:/var/www/html
       - .:/app
-    # ports:
-    #   - "80:8081"
-    #   - "443:8443"
+    ports:
+      - "443:8443"
     depends_on:
       - "nfe-php-fpm"
       - "composer"
