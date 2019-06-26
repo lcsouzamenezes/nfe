@@ -9,17 +9,19 @@ services:
     volumes:
       - .:/var/www/html
       - .:/app
-    # ports:
-    #   - "80:8081"
-    #   - "443:8443"
+    ports:
+      - "443:8443"
     depends_on:
       - "nfe-php-fpm"
+      - "composer"
     networks:
       static-network:
         ipv4_address: 172.15.1.2
 
   nfe-php-fpm:
-    build: docker/php-fpm
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile
     container_name: nfe-php-fpm
     working_dir: /app
     volumes:
@@ -76,11 +78,26 @@ services:
       - -b
       - 0.0.0.0:8088
       - -s
-      - apiary.apib
+      - API_Specification.apib
     ports:
       - "8088:8088"
     volumes:
       - .:/doc
+
+  composer:
+    container_name: vendor
+    image: composer:1.7
+    working_dir: /app
+    entrypoint:
+      - composer
+      - install
+      - --ignore-platform-reqs
+      - --no-interaction
+      - --no-plugins
+      - --no-scripts
+      - --prefer-dist
+    volumes:
+      - .:/app
 
 networks:
   static-network:
