@@ -122,5 +122,12 @@ $router->group(
                 'uses' => 'Certificado@excluir'
             ]
         );
+        $router->put(
+            '/certificado/{id}',
+            [
+                'as' => 'atualizar-certificado',
+                'uses' => 'Certificado@atualizar'
+            ]
+        );
     }
 );
