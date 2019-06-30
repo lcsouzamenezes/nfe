@@ -46,4 +46,16 @@ class Certificado
         $service->excluirCertificado($id);
     }
 
+    public function atualizar(Request $request, $id)
+    {
+        try {
+            $serviceCert = new CertificadoService();
+            $service = $serviceCert->atualizarCertificado($request, $id);
+
+            return response()->json($service, 200);
+        } catch (ValidatorException $e) {
+            return response()->json($e->getMessage(), 400);
+        }
+    }
+
 }

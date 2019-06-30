@@ -36,4 +36,12 @@ class Certificado
         $excluirCertificado = Cert::find($id);
         $excluirCertificado->delete();
     }
+
+    public function atualizarCertificado($request, $id)
+    {
+        $atualizar = Cert::find($id)
+            ->update($request->all());
+
+        return $atualizar;
+    }
 }
