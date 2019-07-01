@@ -10,7 +10,7 @@ class Certificado
 {
     public function cadastrar(Request $request)
     {
-        $file = $request['path'];
+        $file = $request['file'];
 
         if ($file->getClientOriginalExtension() != 'pfx') {
             return response()->json('Somente arquivo .pfx', 400);

@@ -10,7 +10,7 @@ class Certificado
 {
     public function cadastrar($request)
     {
-        $file = $request['path'];
+        $file = $request['file'];
 
         $cadastrar = new Cert();
         $cadastrar->razaosocial = $request['razaosocial'];
