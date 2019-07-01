@@ -5,7 +5,7 @@
 $router->get(
     '/',
     function () use ($router) {
-        return '<p>Acessar a Documentação nesse <a href="https://github.com/culturagovbr/nfe/blob/dev/API_Specification.apib"> link </a></p>';
+        return '<p>Acessar a Documentação nesse <a href="http://localhost:8088">link</a></p>';
     }
 );
 
