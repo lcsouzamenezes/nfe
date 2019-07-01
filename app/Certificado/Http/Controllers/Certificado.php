@@ -52,7 +52,7 @@ class Certificado
             $serviceCert = new CertificadoService();
             $service = $serviceCert->atualizarCertificado($request, $id);
 
-            return response()->json($service, 200);
+            return response()->json('Atualizado com sucesso', 200);
         } catch (ValidatorException $e) {
             return response()->json($e->getMessage(), 400);
         }
